@@ -1,0 +1,109 @@
+/* Dashboard Styles */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.metric-card {
+    background: var(--tertiary-bg-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.metric-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.metric-info h5 {
+    font-size: 0.9rem;
+    color: var(--txt-color);
+    margin-bottom: 0.3rem;
+}
+
+.metric-info h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
+}
+
+.metric-info span {
+    font-size: 0.8rem;
+}
+
+.card {
+    background: var(--tertiary-bg-color);
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+}
+
+.table {
+    color: var(--light-txt-color);
+    margin-bottom: 0;
+}
+
+.table th {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-weight: 500;
+}
+
+.table td {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    vertical-align: middle;
+}
+
+.quick-actions {
+    margin: -0.5rem;
+}
+
+.action-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    text-align: center;
+    color: var(--light-txt-color);
+    transition: all 0.3s ease;
+}
+
+.action-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+    text-decoration: none;
+    color: white;
+}
+
+.action-card i {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+}
+
+.chart-container {
+    position: relative;
+}

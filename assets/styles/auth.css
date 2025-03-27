@@ -1,0 +1,168 @@
+:root {
+    --bg-color: #17191c;
+    --tertiary-bg-color: #22252a;
+    --txt-color: #818898;
+    --light-txt-color: #dbdde1;
+    --primary-color: #4CAF50;
+    --primary-hover: #3e8e41;
+    --input-bg: #2d3035;
+    --card-bg: #1e2025;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color);
+    color: var(--txt-color);
+    background-image:
+            radial-gradient(circle at 10% 20%, rgba(76, 175, 80, 0.1) 0%, transparent 20%),
+            radial-gradient(circle at 90% 80%, rgba(76, 175, 80, 0.1) 0%, transparent 20%);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 480px;
+    padding: 2rem;
+}
+
+.auth-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.auth-icon i {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.auth-header h2 {
+    color: var(--light-txt-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.auth-header p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--light-txt-color);
+}
+
+.input-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-field i {
+    position: absolute;
+    left: 15px;
+    color: var(--txt-color);
+    font-size: 1.1rem;
+}
+
+.input-field input,
+.input-field select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background-color: var(--input-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--light-txt-color);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.input-field input:focus,
+.input-field select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: var(--txt-color);
+    font-size: 1.2rem;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 0.5rem;
+}
+
+.auth-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 1.5rem;
+    }
+
+    .auth-container {
+        padding: 1rem;
+    }
+}
