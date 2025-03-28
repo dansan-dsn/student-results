@@ -144,95 +144,172 @@
     }
 }
 
-/* Edit Profile Modal - Dark Theme */
-#editProfileModal .modal-content {
+/* ===================== */
+/* DARK THEME MODAL STYLES */
+/* ===================== */
+
+/* Modal Container */
+.modal-content {
     background-color: var(--tertiary-bg-color);
     color: var(--light-txt-color);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
 }
 
-#editProfileModal .modal-header {
+/* Modal Header */
+.modal-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
 }
 
-#editProfileModal .modal-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+.modal-title {
+    color: var(--light-txt-color);
+    font-weight: 600;
 }
 
-#editProfileModal .btn-close {
+.btn-close {
     filter: invert(1);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
 }
 
-#editProfileModal .form-control,
-#editProfileModal .form-select {
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 1.5rem;
+    color: var(--light-txt-color);
+}
+
+/* Form Elements */
+.modal .form-label {
+    color: var(--txt-color);
+    margin-bottom: 0.5rem;
+}
+
+.modal .form-control,
+.modal .form-select {
     background-color: var(--bg-color);
     color: var(--light-txt-color);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0.75rem;
+    transition: all 0.3s ease;
 }
 
-#editProfileModal .form-control:focus,
-#editProfileModal .form-select:focus {
+.modal .form-control:focus,
+.modal .form-select:focus {
     background-color: var(--bg-color);
     color: var(--light-txt-color);
     border-color: var(--primary-color);
     box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
 }
 
-#editProfileModal .form-label {
-    color: var(--txt-color);
+/* Modal Footer */
+.modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
 }
 
-#editProfileModal .btn-secondary {
+/* Buttons */
+.modal .btn-secondary {
     background-color: #6c757d;
     border-color: #6c757d;
+    color: white;
 }
 
-#editProfileModal .btn-secondary:hover {
+.modal .btn-secondary:hover {
     background-color: #5c636a;
     border-color: #565e64;
 }
 
-#editProfileModal .btn-primary {
+.modal .btn-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
 }
 
-#editProfileModal .btn-primary:hover {
+.modal .btn-primary:hover {
     background-color: var(--primary-hover);
     border-color: var(--primary-hover);
 }
 
-/* Custom scrollbar for modal */
-#editProfileModal .modal-body::-webkit-scrollbar {
+/* Custom Scrollbar */
+.modal-body::-webkit-scrollbar {
     width: 8px;
 }
 
-#editProfileModal .modal-body::-webkit-scrollbar-track {
+.modal-body::-webkit-scrollbar-track {
     background: var(--bg-color);
+    border-radius: 4px;
 }
 
-#editProfileModal .modal-body::-webkit-scrollbar-thumb {
+.modal-body::-webkit-scrollbar-thumb {
     background: var(--primary-color);
     border-radius: 4px;
 }
 
-/* For dropdown menu in dark mode */
-#editProfileModal .dropdown-menu {
+/* Dropdown Menus */
+.modal .dropdown-menu {
     background-color: var(--tertiary-bg-color);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 
-#editProfileModal .dropdown-item {
+.modal .dropdown-item {
     color: var(--light-txt-color);
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
 }
 
-#editProfileModal .dropdown-item:hover {
+.modal .dropdown-item:hover {
     background-color: rgba(76, 175, 80, 0.2);
     color: var(--light-txt-color);
 }
 
-/* Date picker styling */
-#editProfileModal input[type="date"]::-webkit-calendar-picker-indicator {
+/* Special Input Types */
+.modal input[type="date"]::-webkit-calendar-picker-indicator,
+.modal input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     opacity: 0.8;
+}
+
+.modal input::placeholder {
+    color: rgba(241, 236, 236, 0.5);
+    transition: color 0.3s ease;
+}
+.modal input:focus::placeholder {
+    color: transparent;
+}
+
+/* Checkboxes and Radios */
+.modal .form-check-input {
+    background-color: var(--bg-color);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.modal .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Validation Styles */
+.modal .is-invalid {
+    border-color: #dc3545;
+}
+
+.modal .invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem auto;
+    }
+    
+    .modal-content {
+        border-radius: 0;
+    }
 }

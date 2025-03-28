@@ -4,6 +4,8 @@ include('header.php');
 $user_id = $_SESSION['user_id'];
 $role = strtolower($_SESSION['user_role'] ?? '');
 $user_email = '';
+$success_msg = '';
+$error_msg = '';
 
 try {
     $stmt = $dbh->prepare("SELECT email FROM users WHERE id = ?");
@@ -12,6 +14,7 @@ try {
     $user_email = $user_data->email ?? "";
 }catch(PDOException $e){
     error_log("Database error (users table): " . $e->getMessage());
+    $error_msg = "Error loading user data";
 }
 
 // Fetch data by role
@@ -29,13 +32,75 @@ try {
     }
 } catch (PDOException $e) {
     error_log("Database error (role table): " . $e->getMessage());
+    $error_msg = "Error loading profile data";
+}
+
+// department access
+try {
+    $department = $dbh->query("SELECT id, department_name FROM department");
+    $dept = $department->fetchAll(PDO::FETCH_OBJ);
+} catch(PDOException $e) {
+    error_log("Database error (department table): " . $e->getMessage());
+    $error_msg = "Error loading department data";
+}
+
+// Handle Profile Update
+if (isset($_POST['update_profile'])) {
+    try{
+        // $dbh->beginTransaction();
+
+        // update the email
+        $new_email = $_POST['email'];
+        $stmt = $dbh->prepare('UPDATE users SET email = ? WHERE id = ?');
+        $stmt->execute([$new_email, $user_id]);
+
+        // update the role based features
+        $new_name = trim($_POST['first_name'] . ' ' . $_POST['last_name']);
+        $full_name = explode(' ', $new_name);
+        $date_of_birth = $_POST['date_of_birth'];
+        $gender = $_POST['gender'];
+
+        if($role === 'staff') {
+            $department = $_POST['department'];
+            $rank = $_POST['rank'];
+
+            $stmt = $dbh->prepare('UPDATE staff SET name = ?, date_of_birth = ?, gender = ?, department = ?, rank = ? WHERE staffId = ?');
+            $stmt->execute([$new_name, $date_of_birth, $gender, $department, $rank, $user_id]);
+        } elseif($role === 'student') {
+            $reg_no = $_POST['reg_no'];
+            $student_no = $_POST['student_no'];
+            $nationality = $_POST['nationality'];
+
+            $stmt = $dbh->prepare('UPDATE students SET name = ?, student_no = ?, reg_no = ?, date_of_birth = ?, gender = ?, nationality = ? WHERE studentId = ?');
+            $stmt->execute([$new_name, $student_no, $reg_no, $date_of_birth, $gender, $nationality, $user_id]);
+        }
+        $dbh->commit();
+        $success_msg = "Profile successfully updated!";
+        sleep(2); 
+        header("Location: profile.php?updated=1");
+        exit();
+
+    } catch (PDOException $e) {
+        // $dbh->rollBack();
+        error_log("Database error" . $e->getMessage());
+        $error_msg = "";
+    }
 }
 
 ?>
 
 <main class="container">
+
     <div class="main-view">
         <div class="profile-container">
+
+            <?php if ($success_msg): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($success_msg) ?></div>
+            <?php endif; ?>
+            
+            <?php if ($error_msg): ?>
+                <div class="alert alert-danger"><?= htmlspecialchars($error_msg) ?></div>
+            <?php endif; ?>
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="profile-avatar">
@@ -107,7 +172,7 @@ try {
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Department:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->deptId) ?: 'N/A'?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->department) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Rank/Position:</span>
@@ -139,7 +204,7 @@ try {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="profileEditForm" method="POST" action="update_profile.php">
+                <form method="POST" action="">
                     <input type="hidden" name="user_id" value="<?= $user_id ?>">
                     <input type="hidden" name="user_role" value="<?= $role ?>">
                     
@@ -173,7 +238,6 @@ try {
                             <select class="form-select" id="gender" name="gender">
                                 <option value="Male" <?= ($role_data->gender ?? '') == 'Male' ? 'selected' : '' ?>>Male</option>
                                 <option value="Female" <?= ($role_data->gender ?? '') == 'Female' ? 'selected' : '' ?>>Female</option>
-                                <option value="Other" <?= ($role_data->gender ?? '') == 'Other' ? 'selected' : '' ?>>Other</option>
                             </select>
                         </div>
                     </div>
@@ -203,21 +267,10 @@ try {
                         <div class="col-md-12">
                             <label for="department" class="form-label">Department</label>
                             <select class="form-select" id="department" name="department">
-                                <?php
-                                // Fetch departments from database
-                                $depts = [];
-                                try {
-                                    $stmt = $dbh->query("SELECT * FROM departments");
-                                    $depts = $stmt->fetchAll(PDO::FETCH_OBJ);
-                                } catch (PDOException $e) {
-                                    error_log("Department fetch error: " . $e->getMessage());
-                                }
-                                
-                                foreach ($depts as $dept) {
-                                    $selected = ($dept->id == ($role_data->deptId ?? '')) ? 'selected' : '';
-                                    echo "<option value='{$dept->id}' $selected>{$dept->name}</option>";
-                                }
-                                ?>
+                                <option value="" selected disabled>Select Department</option>
+                                <?php foreach($dept as $dpt): ?>
+                                    <option value="<?=$dpt->department_name; ?>" <?= ($role_data->department == $dpt->department_name) ? 'selected' : '';?> > <?= htmlspecialchars($dpt->department_name);?> </option>
+                                <?php endforeach;?>
                             </select>
                         </div>
                     </div>
@@ -231,7 +284,7 @@ try {
                     
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="submit" class="btn btn-primary" name="update_profile">Save Changes</button>
                     </div>
                 </form>
             </div>
