@@ -1,5 +1,13 @@
 <?php
 include('config/db.php');
+
+session_start();
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
+    echo 'Redirecting to login .....';
+    header('Location: login.php');
+    exit;
+}
 ?>
 
 <!doctype html>

@@ -154,6 +154,7 @@ if (isset($_SESSION['success'])) {
                         <label for="gender">Gender</label>
                         <div class="input-field">
                             <select class="form-control" id="gender" name="gender" required>
+                                <option value="" selected disabled>Select gender</option>
                                 <option value="male" <?php echo (isset($_POST['gender']) && $_POST['gender'] == 'male') ? 'selected' : ''; ?>>Male</option>
                                 <option value="female" <?php echo (isset($_POST['gender']) && $_POST['gender'] == 'female') ? 'selected' : ''; ?>>Female</option>
                             </select>

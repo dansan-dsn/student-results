@@ -1,55 +1,42 @@
 <?php
-session_start();
 include('config/db.php');
 
-if(isset($_POST['login_btn'])){
+if(isset($_POST['reset_btn'])){
+
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
-    // Check if email exists
-    $stmt = $dbh->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
+    try{
+        // Check if email exists
+        $stmt = $dbh->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
 
-    if($stmt->rowCount() > 0){
-        $user = $stmt->fetch(PDO::FETCH_OBJ);
+        if($stmt->rowCount() > 0){
+            $user = $stmt->fetch(PDO::FETCH_OBJ);
 
-        // Verify password
-        if(password_verify($password, $user->password)){
-            // Start session and set user data
-            $_SESSION['user_id'] = $user->id;
-            $_SESSION['user_role'] = $user->role;
+            // hash new password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-            if($user->role == 'student') {
-                $stmt = $dbh->prepare("SELECT * FROM students WHERE studentId = :studentId AND student_no IS NOT NULL AND reg_no IS NOT NULL");
-                $stmt->bindParam(':studentId', $user->id);
-                $stmt->execute();
+            // update the password
+            $stmt = $dbh->prepare("UPDATE users SET password = :password WHERE email = :email");
+            $stmt->bindParam(':password', $hashed_password);
+            $stmt->bindParam(':email', $email);
 
-                if($stmt->rowCount() == 0){
-                    $_SESSION['role'] = 'student';
-                    header('Location: setup.php');
-                    exit();
-                }
-            }else if ($user->role == 'staff') {
-                $stmt = $dbh->prepare("SELECT * FROM staff WHERE staffId = :staffId AND rank IS NOT NULL");
-                $stmt->bindParam(':staffId', $user->id);
-                $stmt->execute();
-
-                if($stmt->rowCount() == 0){
-                    $_SESSION['role'] = 'staff';
-                    header('Location: setup.php');
-                    exit();
-                }
+            if($stmt->execute()){
+                $success = "Successfully Reset!";
+                header("refresh:3;url=login.php");
+            } else {
+                $error = "Failed to reset!";
             }
-            header("Location: index.php");
-            exit();
-           
         } else {
-            $error = "Invalid password!";
+            $error = "Email not registered!";
         }
-    } else {
-        $error = "Email not registered!";
+
+    } catch(PDOException $e) {
+        echo $e->getMessage();
     }
+    
 }
 ?>
 
@@ -70,8 +57,8 @@ if(isset($_POST['login_btn'])){
 <div class="auth-container" id="app">
     <div class="auth-card">
         <div class="auth-header">
-            <h2>Enter your Account</h2>
-            <p>Welcome Back</p>
+            <h2>Reset Account</h2>
+            <p>We can still reset your password</p>
         </div>
 
         <?php if (isset($error)): ?>
@@ -88,9 +75,13 @@ if(isset($_POST['login_btn'])){
             </div>
         <?php endif; ?> 
 
+        <?php if (isset($success)): ?>
+            <div class="alert alert-success"><?php echo $success; ?></div>
+        <?php endif; ?>
+
         <form method="POST" class="auth-form">
             <div class="input-group">
-                <label for="email">Email</label>
+                <label for="email">Your Email</label>
                 <div class="input-field">
                     <i class='bx bxs-envelope'></i>
                     <input type="email" id="email" name="email" placeholder="example@university.edu" required>
@@ -98,7 +89,7 @@ if(isset($_POST['login_btn'])){
             </div>
 
             <div class="input-group">
-                <label for="password">Password</label>
+                <label for="password">New Password</label>
                 <div class="input-field">
                     <i class='bx bxs-lock-alt'></i>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
@@ -106,17 +97,10 @@ if(isset($_POST['login_btn'])){
                 </div>
             </div>
 
-            <div>
-                <p><a href="reset_pwd.php" style="text-decoration: none; color: #4b8f1f"
-                    onmouseover="this.style.color='#79c746'"
-                    onmouseout="this.style.color='#4b8f1f'"
-                >Forgot Password?</a></p>
-            </div>
-
-            <button type="submit" name="login_btn" class="auth-btn">Login</button>
+            <button type="submit" name="reset_btn" class="auth-btn">Reset Password</button>
 
             <div class="auth-footer">
-                <p> Without an account? <a href="register.php">Register</a></p>
+                <p> Without an account? <a href="login.php">Login</a></p>
             </div>
         </form>
     </div>
