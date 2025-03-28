@@ -1,0 +1,238 @@
+/* Profile Container */
+.profile-container {
+    background-color: var(--tertiary-bg-color);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar i {
+    font-size: 5rem;
+    color: var(--primary-color);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    color: var(--light-txt-color);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.profile-role {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0.25rem 0 0;
+}
+
+.role-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.role-badge.student {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: var(--primary-color);
+}
+
+.role-badge.staff {
+    background-color: rgba(41, 121, 255, 0.2);
+    color: #2979ff;
+}
+
+/* Profile Details */
+.detail-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: var(--light-txt-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-row {
+    display: flex;
+    margin-bottom: 0.75rem;
+}
+
+.detail-label {
+    color: var(--txt-color);
+    width: 180px;
+    font-weight: 500;
+}
+
+.detail-value {
+    color: var(--light-txt-color);
+    flex: 1;
+}
+
+/* Profile Actions */
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-edit, .btn-change-password {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-edit {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-change-password {
+    background-color: transparent;
+    color: var(--txt-color);
+    border: 1px solid var(--txt-color);
+}
+
+.btn-edit:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.btn-change-password:hover {
+    color: var(--light-txt-color);
+    border-color: var(--light-txt-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .detail-label {
+        width: 100%;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+    }
+}
+
+/* Edit Profile Modal - Dark Theme */
+#editProfileModal .modal-content {
+    background-color: var(--tertiary-bg-color);
+    color: var(--light-txt-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#editProfileModal .modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#editProfileModal .modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#editProfileModal .btn-close {
+    filter: invert(1);
+}
+
+#editProfileModal .form-control,
+#editProfileModal .form-select {
+    background-color: var(--bg-color);
+    color: var(--light-txt-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#editProfileModal .form-control:focus,
+#editProfileModal .form-select:focus {
+    background-color: var(--bg-color);
+    color: var(--light-txt-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+}
+
+#editProfileModal .form-label {
+    color: var(--txt-color);
+}
+
+#editProfileModal .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+#editProfileModal .btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+#editProfileModal .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+#editProfileModal .btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* Custom scrollbar for modal */
+#editProfileModal .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+#editProfileModal .modal-body::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+#editProfileModal .modal-body::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+/* For dropdown menu in dark mode */
+#editProfileModal .dropdown-menu {
+    background-color: var(--tertiary-bg-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#editProfileModal .dropdown-item {
+    color: var(--light-txt-color);
+}
+
+#editProfileModal .dropdown-item:hover {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: var(--light-txt-color);
+}
+
+/* Date picker styling */
+#editProfileModal input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.8;
+}

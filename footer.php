@@ -8,54 +8,51 @@
     <!--  custom js links  -->
     <script src="assets/js/header.js"></script>
     <script>
-
-        function toggleSubmenu(id) {
-            const submenu = document.getElementById(`${id}-submenu`);
-            const chevron = document.getElementById(`${id}-chevron`);
-
-            // Toggle the current submenu
-            submenu.classList.toggle('show');
-            chevron.classList.toggle('rotated');
-
-            // Close other submenus
-            document.querySelectorAll('.submenu').forEach(menu => {
-            if (menu.id !== `${id}-submenu` && menu.classList.contains('show')) {
-                    menu.classList.remove('show');
-                    const otherChevron = document.getElementById(menu.id.replace('-submenu', '-chevron'));
-                    if (otherChevron) otherChevron.classList.remove('rotated');
-                }
-            });
+function toggleSubmenu(id) {
+    const submenu = document.getElementById(`${id}-submenu`);
+    const chevron = document.getElementById(`${id}-chevron`);
+    
+    submenu.classList.toggle('show');
+    chevron.classList.toggle('rotated');
+    
+    // Close other submenus
+    document.querySelectorAll('.submenu').forEach(menu => {
+        if (menu.id !== `${id}-submenu` && menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            document.getElementById(menu.id.replace('-submenu', '-chevron'))?.classList.remove('rotated');
         }
+    });
+}
 
-        // Initialize submenus based on current page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get current page from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const currentPage = urlParams.get('page');
-            
-            // Open relevant submenu if needed
-            if (currentPage) {
-                const parentItems = {
-                    'view-results': 'results',
-                    'semester-results': 'results',
-                    'generate-reports': 'reports',
-                    'export-results': 'reports',
-                    'submit-complaint': 'complaints',
-                    'complaint-status': 'complaints',
-                    'assign-seats': 'room-management',
-                    'view-allocations': 'room-management'
-                };
-                
-                if (parentItems[currentPage]) {
-                    const submenu = document.getElementById(`${parentItems[currentPage]}-submenu`);
-                    const chevron = document.getElementById(`${parentItems[currentPage]}-chevron`);
-                    if (submenu && chevron) {
-                        submenu.classList.add('show');
-                        chevron.classList.add('rotated');
-                    }
-                }
-            }
-        });
-    </script>
+// Initialize submenus on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = basename(window.location.pathname);
+    const parentMenus = {
+        'view-results.php': 'results',
+        'semester-results.php': 'results',
+        'generate-reports.php': 'reports',
+        'export-results.php': 'reports',
+        'submit-complaint.php': 'complaints',
+        'complaint-status.php': 'complaints',
+        'assign-seats.php': 'room-management',
+        'view-allocations.php': 'room-management',
+        'departments.php': 'room-management'
+    };
+
+    if (parentMenus[currentPage]) {
+        const submenu = document.getElementById(`${parentMenus[currentPage]}-submenu`);
+        const chevron = document.getElementById(`${parentMenus[currentPage]}-chevron`);
+        if (submenu && chevron) {
+            submenu.classList.add('show');
+            chevron.classList.add('rotated');
+        }
+    }
+});
+
+// Helper function to get base filename
+function basename(path) {
+    return path.split('/').pop().split('?')[0];
+}
+</script>
 </body>
 </html>
