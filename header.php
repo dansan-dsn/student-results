@@ -47,7 +47,7 @@ include('config/db.php');
     <ul>
         <!-- Dashboard -->
         <li class="<?php echo ($_GET['page'] == 'dashboard' || !isset($_GET['page'])) ? 'active' : ''; ?>">
-            <a href="?page=dashboard">
+            <a href="index.php">
                 <i class='bx bxs-dashboard'></i> Dashboard
             </a>
         </li>

@@ -117,8 +117,7 @@ if (isset($_POST['register_btn'])) {
                         <select id="role" name="role" required>
                             <option value="" disabled selected>Select your role</option>
                             <option value="student">Student</option>
-                            <option value="lecturer">Lecturer</option>
-                            <option value="admin">Administrator</option>
+                            <option value="staff">Staff</option>
                         </select>
                     </div>
                 </div>

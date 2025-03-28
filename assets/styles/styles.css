@@ -91,6 +91,10 @@ aside ul li {
     align-items: center;
 }
 
+aside ul li.active a{
+   color: var(--light-txt-color);
+}
+
 aside ul li a {
     color: var(--txt-color);
     text-decoration: none;
@@ -118,8 +122,17 @@ aside ul li a:hover {
 }
 
 .submenu li.active {
-    background-color: #4CAF50;
+    background-color: #616661;
     border-radius: 2rem;
+    color: white;
+}
+
+.submenu li.active:hover {
+    background-color: #4b4e4b;
+    border-radius: 2rem;
+}
+
+.submenu li.active a {
     color: white;
 }
 

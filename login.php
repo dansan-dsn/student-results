@@ -20,17 +20,30 @@ if(isset($_POST['login_btn'])){
             $_SESSION['user_id'] = $user->id;
             $_SESSION['user_role'] = $user->role;
 
-            // Redirect based on role
-            if($user->role == 'administrator'){ 
-                header("Location: dashboard.php");
-                exit();
-            } elseif($user->role == 'student'){ 
-                header("Location: dashboard.php");
-                exit();
-            } else {
-                header("Location: index.php");
-                exit();
+            if($user->role == 'student') {
+                $stmt = $dbh->prepare("SELECT * FROM students WHERE studentId = :studentId AND student_no IS NOT NULL AND reg_no IS NOT NULL");
+                $stmt->bindParam(':studentId', $user->id);
+                $stmt->execute();
+
+                if($stmt->rowCount() == 0){
+                    $_SESSION['role'] = 'student';
+                    header('Location: setup.php');
+                    exit();
+                }
+            }else if ($user->role == 'staff') {
+                $stmt = $dbh->prepare("SELECT * FROM staff WHERE staffId = :staffId AND rank IS NOT NULL");
+                $stmt->bindParam(':staffId', $user->id);
+                $stmt->execute();
+
+                if($stmt->rowCount() == 0){
+                    $_SESSION['role'] = 'staff';
+                    header('Location: setup.php');
+                    exit();
+                }
             }
+            header("Location: index.php");
+            exit();
+           
         } else {
             $error = "Invalid password!";
         }
