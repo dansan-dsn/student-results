@@ -131,7 +131,7 @@ if (isset($_SESSION['success'])) {
                     <div class="input-group">
                         <label for="name">Full Name</label>
                         <div class="input-field">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Full Name" 
+                            <input type="text" style="padding: 10px;" id="name" name="name" placeholder="Full Name" 
                                    value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
                         </div>
                     </div>
@@ -143,7 +143,7 @@ if (isset($_SESSION['success'])) {
                     <div class="input-group">
                         <label for="date_of_birth">Date of Birth</label>
                         <div class="input-field">
-                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
+                            <input type="date" style="padding: 10px;" id="date_of_birth" name="date_of_birth" 
                                    value="<?php echo isset($_POST['date_of_birth']) ? htmlspecialchars($_POST['date_of_birth']) : ''; ?>" required>
                         </div>
                     </div>
@@ -153,7 +153,7 @@ if (isset($_SESSION['success'])) {
                     <div class="input-group">
                         <label for="gender">Gender</label>
                         <div class="input-field">
-                            <select class="form-control" id="gender" name="gender" required>
+                            <select id="gender" style="padding: 12px;" name="gender" required>
                                 <option value="" selected disabled>Select gender</option>
                                 <option value="male" <?php echo (isset($_POST['gender']) && $_POST['gender'] == 'male') ? 'selected' : ''; ?>>Male</option>
                                 <option value="female" <?php echo (isset($_POST['gender']) && $_POST['gender'] == 'female') ? 'selected' : ''; ?>>Female</option>
@@ -170,7 +170,7 @@ if (isset($_SESSION['success'])) {
                         <div class="input-group">
                             <label for="reg_no">Registration Number</label>
                             <div class="input-field">
-                                <input type="text" class="form-control" id="reg_no" name="reg_no" 
+                                <input type="text" style="padding: 10px;" id="reg_no" name="reg_no" 
                                        value="<?php echo isset($_POST['reg_no']) ? htmlspecialchars($_POST['reg_no']) : ''; ?>" placeholder="Registration number" required>
                             </div>
                         </div>
@@ -180,7 +180,7 @@ if (isset($_SESSION['success'])) {
                         <div class="input-group">
                             <label for="nationality">Nationality</label>
                             <div class="input-field">
-                                <input type="text" class="form-control" id="nationality" name="nationality" 
+                                <input type="text" style="padding: 10px;" id="nationality" name="nationality" 
                                        value="<?php echo isset($_POST['nationality']) ? htmlspecialchars($_POST['nationality']) : ''; ?>" placeholder="Nationality" required>
                             </div>
                         </div>
@@ -192,7 +192,7 @@ if (isset($_SESSION['success'])) {
                         <div class="input-group">
                             <label for="student_no">Student Number</label>
                             <div class="input-field">
-                                <input type="text" class="form-control" id="student_no" name="student_no" 
+                                <input type="text" style="padding: 10px;" id="student_no" name="student_no" 
                                        value="<?php echo isset($_POST['student_no']) ? htmlspecialchars($_POST['student_no']) : ''; ?>" placeholder="Student number" required>
                             </div>
                         </div>
@@ -204,7 +204,7 @@ if (isset($_SESSION['success'])) {
                         <div class="input-group">
                             <label for="rank">Rank</label>
                             <div class="input-field">
-                                <input type="text" class="form-control" id="rank" name="rank" 
+                                <input type="text" id="rank" name="rank" 
                                        value="<?php echo isset($_POST['rank']) ? htmlspecialchars($_POST['rank']) : ''; ?>" placeholder="Rank" required>
                             </div>
                         </div>

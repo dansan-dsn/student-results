@@ -32,106 +32,157 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
 <body>
 <div id="app">
     <div>
-    <!-- Navbar Section -->
+    <<!-- Navbar Section -->
     <header>
-        <nav class="navbar navbar-dark">
-            <div class="container-fluid">
-                <form class="d-flex ms-auto">
-                    <input class="search-input" placeholder="Search">
-                </form>
-                <button class="btn" type="button">
-                    <i class='bx bxs-bell' style='color:#818898; font-size: 2rem'></i>
-                </button>
-                <button class="btn" type="button">
-                    <i class='bx bxs-user-circle' style='color:#818898; font-size: 2rem'></i>
-                </button>
+        <nav class="custom-navbar">
+            <div class="container-fluid navbar-container">
+
+            <!-- In your navbar-right div -->
+                <div class="navbar-right">
+
+                    <!-- Notifications Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn-notification dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bxs-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">New Notifications</h6></li>
+                            <li><a class="dropdown-item" href="#"><strong>Grade Updated</strong><br>Math 101 score changed</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center" href="#">View All</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- User Dropdown -->
+                    <div class="dropdown">
+                        <button class="user-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bxs-user-circle"></i> <span>Dansan</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bx bx-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bx bx-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="logout.php"><i class="bx bx-log-out me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+
         </nav>
     </header>
 
-    <!-- Sidebar (Aside) Section -->
     <aside>
-    <h5 class="logo-title">Results</h5>
-    <ul>
-        <!-- Dashboard -->
-        <li class="<?php echo ($_GET['page'] == 'dashboard' || !isset($_GET['page'])) ? 'active' : ''; ?>">
-            <a href="index.php">
-                <i class='bx bxs-dashboard'></i> Dashboard
-            </a>
-        </li>
-
-        <!-- Results (with submenu) -->
-        <li class="<?php echo (in_array($_GET['page'], ['view-results', 'semester-results'])) ? 'active' : ''; ?>">
-            <a href="javascript:void(0);" onclick="toggleSubmenu('results')">
-                <i class='bx bxs-report'></i> Results
-                <i class='bx bx-chevron-down' style='float: right;' id="results-chevron"></i>
-            </a>
-            <ul id="results-submenu" class="submenu" style="display: <?php echo ($_GET['page'] == 'view-results' || $_GET['page'] == 'semester-results') ? 'block' : 'none'; ?>;">
-                <li class="<?php echo ($_GET['page'] == 'view-results') ? 'active' : ''; ?>">
-                    <a href="?page=view-results">View Results</a>
-                </li>
-                <li class="<?php echo ($_GET['page'] == 'semester-results') ? 'active' : ''; ?>">
-                    <a href="?page=semester-results">Semester Summary</a>
+        <h5 class="logo-title">Results System</h5>
+        
+        <!-- Dashboard Section -->
+        <div class="menu-section">
+            <h6 class="menu-category">DASHBOARD</h6>
+            <ul>
+                <li class="<?php echo ($_GET['page'] == 'dashboard' || !isset($_GET['page'])) ? 'active' : ''; ?>">
+                    <a href="index.php">
+                        <i class='bx bxs-dashboard'></i> Dashboard
+                    </a>
                 </li>
             </ul>
-        </li>
+        </div>
 
-        <!-- Reports (with submenu) -->
-        <li class="<?php echo (in_array($_GET['page'], ['generate-reports', 'export-results'])) ? 'active' : ''; ?>">
-            <a href="javascript:void(0);" onclick="toggleSubmenu('reports')">
-                <i class='bx bxs-file-pdf'></i> Reports
-                <i class='bx bx-chevron-down' style='float: right;' id="reports-chevron"></i>
-            </a>
-            <ul id="reports-submenu" class="submenu" style="display: <?php echo ($_GET['page'] == 'generate-reports' || $_GET['page'] == 'export-results') ? 'block' : 'none'; ?>;">
-                <li class="<?php echo ($_GET['page'] == 'generate-reports') ? 'active' : ''; ?>">
-                    <a href="?page=generate-reports">Generate Reports</a>
-                </li>
-                <li class="<?php echo ($_GET['page'] == 'export-results') ? 'active' : ''; ?>">
-                    <a href="?page=export-results">Export to Excel</a>
+        <!-- Results Section -->
+        <div class="menu-section">
+            <h6 class="menu-category">RESULTS</h6>
+            <ul>
+                <li class="<?php echo (in_array($_GET['page'], ['view-results', 'semester-results'])) ? 'active' : ''; ?>">
+                    <a href="javascript:void(0);" onclick="toggleSubmenu('results')">
+                        <i class='bx bxs-report'></i> Results
+                        <i class='bx bx-chevron-down' id="results-chevron"></i>
+                    </a>
+                    <ul id="results-submenu" class="submenu" style="display: <?php echo (in_array($_GET['page'], ['view-results', 'semester-results'])) ? 'block' : 'none'; ?>;">
+                        <li class="<?php echo ($_GET['page'] == 'view-results') ? 'active' : ''; ?>">
+                            <a href="?page=view-results">View Results</a>
+                        </li>
+                        <li class="<?php echo ($_GET['page'] == 'semester-results') ? 'active' : ''; ?>">
+                            <a href="?page=semester-results">Semester Summary</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-        </li>
+        </div>
 
-        <!-- Complaints (with submenu) -->
-        <li class="<?php echo (in_array($_GET['page'], ['submit-complaint', 'complaint-status'])) ? 'active' : ''; ?>">
-            <a href="javascript:void(0);" onclick="toggleSubmenu('complaints')">
-                <i class='bx bxs-message-alt-error'></i> Complaints
-                <i class='bx bx-chevron-down' style='float: right;' id="complaints-chevron"></i>
-            </a>
-            <ul id="complaints-submenu" class="submenu" style="display: <?php echo ($_GET['page'] == 'submit-complaint' || $_GET['page'] == 'complaint-status') ? 'block' : 'none'; ?>;">
-                <li class="<?php echo ($_GET['page'] == 'submit-complaint') ? 'active' : ''; ?>">
-                    <a href="?page=submit-complaint">Submit Complaint</a>
-                </li>
-                <li class="<?php echo ($_GET['page'] == 'complaint-status') ? 'active' : ''; ?>">
-                    <a href="?page=complaint-status">Check Status</a>
+        <!-- Reports Section -->
+        <div class="menu-section">
+            <h6 class="menu-category">REPORTS</h6>
+            <ul>
+                <li class="<?php echo (in_array($_GET['page'], ['generate-reports', 'export-results'])) ? 'active' : ''; ?>">
+                    <a href="javascript:void(0);" onclick="toggleSubmenu('reports')">
+                        <i class='bx bxs-file-pdf'></i> Reports
+                        <i class='bx bx-chevron-down' id="reports-chevron"></i>
+                    </a>
+                    <ul id="reports-submenu" class="submenu" style="display: <?php echo (in_array($_GET['page'], ['generate-reports', 'export-results'])) ? 'block' : 'none'; ?>;">
+                        <li class="<?php echo ($_GET['page'] == 'generate-reports') ? 'active' : ''; ?>">
+                            <a href="?page=generate-reports">Generate Reports</a>
+                        </li>
+                        <li class="<?php echo ($_GET['page'] == 'export-results') ? 'active' : ''; ?>">
+                            <a href="?page=export-results">Export to Excel</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-        </li>
+        </div>
 
-        <!-- Room Management (with submenu) -->
-        <li class="<?php echo (in_array($_GET['page'], ['assign-seats', 'view-allocations'])) ? 'active' : ''; ?>">
-            <a href="javascript:void(0);" onclick="toggleSubmenu('room-management')">
-                <i class='bx bxs-building-house'></i> Room Management
-                <i class='bx bx-chevron-down' style='float: right;' id="room-management-chevron"></i>
-            </a>
-            <ul id="room-management-submenu" class="submenu" style="display: <?php echo ($_GET['page'] == 'assign-seats' || $_GET['page'] == 'view-allocations') ? 'block' : 'none'; ?>;">
-                <li class="<?php echo ($_GET['page'] == 'assign-seats') ? 'active' : ''; ?>">
-                    <a href="?page=assign-seats">Assign Seats</a>
-                </li>
-                <li class="<?php echo ($_GET['page'] == 'view-allocations') ? 'active' : ''; ?>">
-                    <a href="?page=view-allocations">View Allocations</a>
+        <!-- Complaints Section -->
+        <div class="menu-section">
+            <h6 class="menu-category">COMPLAINTS</h6>
+            <ul>
+                <li class="<?php echo (in_array($_GET['page'], ['submit-complaint', 'complaint-status'])) ? 'active' : ''; ?>">
+                    <a href="javascript:void(0);" onclick="toggleSubmenu('complaints')">
+                        <i class='bx bxs-message-alt-error'></i> Complaints
+                        <i class='bx bx-chevron-down' id="complaints-chevron"></i>
+                    </a>
+                    <ul id="complaints-submenu" class="submenu" style="display: <?php echo (in_array($_GET['page'], ['submit-complaint', 'complaint-status'])) ? 'block' : 'none'; ?>;">
+                        <li class="<?php echo ($_GET['page'] == 'submit-complaint') ? 'active' : ''; ?>">
+                            <a href="?page=submit-complaint">Submit Complaint</a>
+                        </li>
+                        <li class="<?php echo ($_GET['page'] == 'complaint-status') ? 'active' : ''; ?>">
+                            <a href="?page=complaint-status">Check Status</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-        </li>
+        </div>
 
-        <!-- Logout -->
-        <li>
-            <a href="logout.php">
-                <i class='bx bx-log-out'></i> Logout
-            </a>
-        </li>
-    </ul>
-</aside>
+        <!-- Room Management Section -->
+        <div class="menu-section">
+            <h6 class="menu-category">ROOM MANAGEMENT</h6>
+            <ul>
+                <li class="<?php echo (in_array($_GET['page'], ['assign-seats', 'view-allocations'])) ? 'active' : ''; ?>">
+                    <a href="javascript:void(0);" onclick="toggleSubmenu('room-management')">
+                        <i class='bx bxs-building-house'></i> Management
+                        <i class='bx bx-chevron-down' id="room-management-chevron"></i>
+                    </a>
+                    <ul id="room-management-submenu" class="submenu" style="display: <?php echo (in_array($_GET['page'], ['assign-seats', 'view-allocations'])) ? 'block' : 'none'; ?>;">
+                        <li class="<?php echo ($_GET['page'] == 'assign-seats') ? 'active' : ''; ?>">
+                            <a href="?page=assign-seats">Assign Seats</a>
+                        </li>
+                        <li class="<?php echo ($_GET['page'] == 'view-allocations') ? 'active' : ''; ?>">
+                            <a href="?page=view-allocations">View Allocations</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Logout Section
+        <div class="menu-section">
+            <h6 class="menu-category">ACCOUNT</h6>
+            <ul>
+                <li>
+                    <a href="logout.php">
+                        <i class='bx bx-log-out'></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div> -->
+    </aside>
 
     <!-- Main Content Section -->
     <div class="logo-title2">
