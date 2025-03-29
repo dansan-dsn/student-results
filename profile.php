@@ -213,7 +213,7 @@ if(isset($_POST['change_password'])){
                 <button class="btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                     <i class='bx bx-edit'></i> Edit Profile
                 </button>
-                <button class="btn-change-password" data-bs-toggle="offcanvas" data-bs-target="#changePasswordOffcanvas">
+                <button class="btn-sm btn-change-password" data-bs-toggle="offcanvas" data-bs-target="#changePasswordOffcanvas">
                     <i class='bx bx-lock-alt'></i> Change Password
                 </button>
             </div>
@@ -309,8 +309,8 @@ if(isset($_POST['change_password'])){
                     <?php endif; ?>
                     
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" name="update_profile">Save Changes</button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-sm btn-primary" name="update_profile">Save</button>
                     </div>
                 </form>
             </div>
@@ -348,7 +348,7 @@ if(isset($_POST['change_password'])){
             </div>
             
             <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary" name="change_password">Update Password</button>
+                <button type="submit" class="btn btn-sm btn-primary" name="change_password">Update Password</button>
             </div>
         </form>
     </div>

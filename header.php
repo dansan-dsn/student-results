@@ -144,7 +144,7 @@ try {
         <ul>
             <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['course.php', 'course_units.php'])) ? 'active' : ''; ?>">
                 <a href="javascript:void(0);" onclick="toggleSubmenu('course')">
-                    <i class='bx bxs-file-pdf'></i> Course
+                    <i class='bx bx-unite'></i> Course
                     <i class='bx bx-chevron-down' id="course-chevron"></i>
                 </a>
                 <ul id="course-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['course.php', 'course_units.php'])) ? 'block' : 'none'; ?>;">
@@ -199,7 +199,7 @@ try {
         </ul>
     </div>
 
-    <!-- Room Management Section -->
+    <!-- Management Section -->
     <div class="menu-section">
         <ul>
             <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['assign-seats.php', 'view-allocations.php', 'departments.php'])) ? 'active' : ''; ?>">

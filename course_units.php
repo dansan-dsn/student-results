@@ -51,8 +51,8 @@ $course_units = $dbh->query("SELECT * FROM course_unit ORDER BY name")->fetchAll
                 <h2 class="department-title">
                     <i class='bx bx-building-house'></i> Course Units
                 </h2>
-                <button class="btn btn-add-department" data-bs-toggle="modal" data-bs-target="#addCourseUnitModal">
-                    <i class='bx bx-plus'></i> Add Course Unit
+                <button class="btn btn-sm btn-add-department" data-bs-toggle="modal" data-bs-target="#addCourseUnitModal">
+                <i class='bx bx-plus-circle'></i>New Course Unit
                 </button>
             </div>
 
@@ -135,8 +135,8 @@ $course_units = $dbh->query("SELECT * FROM course_unit ORDER BY name")->fetchAll
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="add_course_unit" class="btn btn-primary">Save Course</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="add_course_unit" class="btn btn-sm btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -172,8 +172,8 @@ $course_units = $dbh->query("SELECT * FROM course_unit ORDER BY name")->fetchAll
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="edit_course_unit" class="btn btn-primary">Update Course</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="edit_course_unit" class="btn btn-sm btn-primary">Update</button>
                 </div>
             </form>
         </div>
@@ -190,12 +190,12 @@ $course_units = $dbh->query("SELECT * FROM course_unit ORDER BY name")->fetchAll
             </div>
             <form method="POST" action="">
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this course?</p>
+                    <p>Are you sure you want to delete this course unit?</p>
                     <input type="hidden" id="deleteCourseUnitId" name="id">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" name="delete_course_unit" class="btn btn-danger deleteBtn">Delete</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" name="delete_course_unit" class="btn btn-sm btn-danger deleteBtn">Delete</button>
                 </div>
             </form>
         </div>

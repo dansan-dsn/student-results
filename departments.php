@@ -30,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Delete department
             $stmt = $dbh->prepare("DELETE FROM department WHERE id = :id");
             $stmt->execute([':id' => $_POST['department_id']]);
+            header("Location: departments.php?status=success&message=Deleted successfully");
+            exit();
         }
         
     } catch (PDOException $e) {
@@ -37,8 +39,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get all departments using PDO objects
-$departments = $dbh->query("SELECT * FROM department ORDER BY department_name")->fetchAll(PDO::FETCH_OBJ);
+// / Get all departments using PDO objects
+try {
+    $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")->fetchAll(PDO::FETCH_OBJ);
+} catch(PDOException $e) {
+    error_log("Database error (department table): " . $e->getMessage());
+    $error_msg = "Error loading staff data";
+    header("Location: departments.php?status=success&error=$error_msg");
+    exit();
+}
+
+// department access
+try {
+    $staffs = $dbh->query("SELECT staffId, name FROM staff")->fetchAll(PDO::FETCH_OBJ);
+} catch(PDOException $e) {
+    error_log("Database error (department table): " . $e->getMessage());
+    $error_msg = "Error loading staff data";
+    header("Location: departments.php?status=success&error=$error_msg");
+    exit();
+}
 ?>
 
 <main class="container">
@@ -49,8 +68,8 @@ $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")-
                 <h2 class="department-title">
                     <i class='bx bx-building-house'></i> Departments
                 </h2>
-                <button class="btn btn-add-department" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
-                    <i class='bx bx-plus'></i> Add Department
+                <button class="btn btn-sm btn-add-department" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+                <i class='bx bx-plus-circle'></i>New
                 </button>
             </div>
 
@@ -90,11 +109,11 @@ $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")-
                                 </td>
                             </tr>
                             <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="4" class="text-center">No departments found</td>
-                            </tr>
-                        <?php endif; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="4" class="text-center">No departments found</td>
+                                </tr>
+                            <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -119,12 +138,17 @@ $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")-
                     
                     <div class="mb-3">
                         <label for="departmentHead" class="form-label">Department Head</label>
-                        <input type="text" class="form-control" id="departmentHead" name="department_head" placeholder="H.O.D" required>
+                        <select class="form-select" id="departmentHead" name="department_head">
+                            <option value="" selected disabled>Select Department Head</option>
+                            <?php foreach($staffs as $staff): ?>
+                                <option value="<?=$staff->name; ?>"> <?= htmlspecialchars($staff->name);?> </option>
+                            <?php endforeach;?>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="add_department" class="btn btn-primary">Save Department</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="add_department" class="btn btn-sm btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -150,12 +174,17 @@ $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")-
                     
                     <div class="mb-3">
                         <label for="editDepartmentHead" class="form-label">Department Head</label>
-                        <input type="text" class="form-control" id="editDepartmentHead" name="department_head" required>
+                        <select class="form-select" id="editDepartmentHead" name="department_head">
+                            <option value="" selected disabled>Select Department Head</option>
+                            <?php foreach($staffs as $staff): ?>
+                                <option value="<?=$staff->name; ?>" <?= ($staff->name == $departments->department_head) ? 'selected' : '';?> > <?= htmlspecialchars($staff->name);?> </option>
+                            <?php endforeach;?>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="edit_department" class="btn btn-primary">Update Department</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="edit_department" class="btn btn-sm btn-primary">Update</button>
                 </div>
             </form>
         </div>
@@ -176,8 +205,8 @@ $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")-
                     <input type="hidden" id="deleteDepartmentId" name="department_id">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" name="delete_department" class="btn btn-danger deleteBtn">Delete</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" name="delete_department" class="btn btn-sm btn-danger deleteBtn">Delete</button>
                 </div>
             </form>
         </div>

@@ -49,8 +49,8 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                 <h2 class="department-title">
                     <i class='bx bx-building-house'></i> Main Courses
                 </h2>
-                <button class="btn btn-add-department" data-bs-toggle="modal" data-bs-target="#addCourseModal">
-                    <i class='bx bx-plus'></i> Add Course
+                <button class="btn btn-sm btn-add-department" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+                <i class='bx bx-plus-circle'></i>New Course
                 </button>
             </div>
 
@@ -125,8 +125,8 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="add_course" class="btn btn-primary">Save Course</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="add_course" class="btn btn-sm btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -157,8 +157,8 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="edit_course" class="btn btn-primary">Update Course</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="edit_course" class="btn btn-sm btn-primary">Update</button>
                 </div>
             </form>
         </div>
@@ -179,8 +179,8 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                     <input type="hidden" id="deleteCourseId" name="course_id">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" name="delete_course" class="btn btn-danger deleteBtn">Delete</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" name="delete_course" class="btn btn-sm btn-danger deleteBtn">Delete</button>
                 </div>
             </form>
         </div>
