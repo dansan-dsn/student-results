@@ -29,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Delete course
             $stmt = $dbh->prepare("DELETE FROM course WHERE id = :id");
             $stmt->execute([':id' => $_POST['course_id']]);
+            header("Location: course.php?status=success&message=Deleted successfully");
+            exit();
         }
         
     } catch (PDOException $e) {

@@ -18,6 +18,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([':id' => $_POST['id']]);
             header('Location: assign-seats.php?status=success&message=Deleted successfully!');
             exit();
+        }elseif(isset($_POST['edit_room'])){
+            $stmt = $dbh->prepare("UPDATE room SET room_name = :room_name, capacity = :capacity WHERE id = :id ");
+            $stmt->execute([
+                ':room_name' => $_POST['room_name'],
+                ':capacity' => $_POST['capacity'],
+                ':id' => $_POST['id']
+            ]);
+            header('Location: assign-seats.php?status=success&message=Updated successfully!');
+            exit();
         }
 
     }catch(PDOException $e) {
@@ -186,7 +195,7 @@ try {
 
 <!-- View Room -->
 <div class="modal fade" id="ViewRoomModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Room Data View</h5>
