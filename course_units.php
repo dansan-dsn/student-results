@@ -4,40 +4,42 @@ include('header.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        if (isset($_POST['add_course'])) {
-            // Add new course
-            $stmt = $dbh->prepare("INSERT INTO course (course_name, course_code) VALUES (:course_name, :course_code)");
+        if (isset($_POST['add_course_unit'])) {
+            // Add new course units
+            $stmt = $dbh->prepare("INSERT INTO course_unit (name, code, credit_units) VALUES (:name, :code, :credit_units)");
             $stmt->execute([
-                ':course_name' => $_POST['course_name'],
-                ':course_code' => $_POST['course_code']
+                ':name' => $_POST['name'],
+                ':code' => $_POST['code'],
+                ':credit_units' => $_POST['credit_units']
             ]);
-            header("Location: course.php?status=success&message=Created successful");
+            header("Location: course_units.php?status=success&message=Created successful");
             exit();
             
-        } elseif (isset($_POST['edit_course'])) {
-            // Update course
-            $stmt = $dbh->prepare("UPDATE course SET course_name = :course_name, course_code = :course_code WHERE id = :id");
+        } elseif (isset($_POST['edit_course_unit'])) {
+            // Update course units
+            $stmt = $dbh->prepare("UPDATE course_unit SET name = :name, code = :code, credit_units = :credit_units WHERE id = :id");
             $stmt->execute([
-                ':id' => $_POST['course_id'],
-                ':course_name' => $_POST['course_name'],
-                ':course_code' => $_POST['course_code']
+                ':id' => $_POST['id'],
+                ':name' => $_POST['name'],
+                ':code' => $_POST['code'],
+                ':credit_units' => $_POST['credit_units']
             ]);
-            header("Location: course.php?status=success&message=Updated successfully");
+            header("Location: course_units.php?status=success&message=Updated successfully");
             exit();
             
-        } elseif (isset($_POST['delete_course'])) {
-            // Delete course
-            $stmt = $dbh->prepare("DELETE FROM course WHERE id = :id");
-            $stmt->execute([':id' => $_POST['course_id']]);
+        } elseif (isset($_POST['delete_course_unit'])) {
+            // Delete course units
+            $stmt = $dbh->prepare("DELETE FROM course_unit WHERE id = :id");
+            $stmt->execute([':id' => $_POST['id']]);
         }
         
     } catch (PDOException $e) {
-        header("Location: course.php?status=error&message=Database error: " . $e->getMessage());
+        header("Location: course_units.php?status=error&message=Database error: " . $e->getMessage());
     }
 }
 
 // Get all courses using PDO objects
-$courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PDO::FETCH_OBJ);
+$course_units = $dbh->query("SELECT * FROM course_unit ORDER BY name")->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <main class="container">
@@ -49,8 +51,8 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                 <h2 class="department-title">
                     <i class='bx bx-building-house'></i> Course Units
                 </h2>
-                <button class="btn btn-add-department" data-bs-toggle="modal" data-bs-target="#addCourseModal">
-                    <i class='bx bx-plus'></i> Add Course
+                <button class="btn btn-add-department" data-bs-toggle="modal" data-bs-target="#addCourseUnitModal">
+                    <i class='bx bx-plus'></i> Add Course Unit
                 </button>
             </div>
 
@@ -67,26 +69,27 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (count($courses) > 0): ?>
-                            <?php foreach ($courses as $index => $course): ?>
+                        <?php if (count($course_units) > 0): ?>
+                            <?php foreach ($course_units as $index => $course_unit): ?>
                             <tr>
                                 <th scope="row"><?= $index + 1 ?></th>
-                                <td><?= htmlspecialchars($course->course_code) ?></td>
-                                <td><?= htmlspecialchars($course->course_name) ?></td>
-                                <td><?= htmlspecialchars($course->course_name) ?></td>
+                                <td><?= htmlspecialchars($course_unit->code) ?></td>
+                                <td><?= htmlspecialchars($course_unit->name) ?></td>
+                                <td><?= htmlspecialchars($course_unit->credit_units) ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary me-1 edit-course" 
-                                            data-id="<?= $course->id ?>" 
-                                            data-code="<?= htmlspecialchars($course->course_code) ?>" 
-                                            data-name="<?= htmlspecialchars($course->course_name) ?>" 
+                                    <button class="btn btn-sm btn-primary me-1 edit-course_unit" 
+                                            data-id="<?= $course_unit->id ?>" 
+                                            data-code="<?= htmlspecialchars($course_unit->code) ?>" 
+                                            data-name="<?= htmlspecialchars($course_unit->name) ?>" 
+                                            data-unit="<?= htmlspecialchars($course_unit->credit_units) ?>" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#editCourseModal">
+                                            data-bs-target="#editCourseUnitModal">
                                         <i class='bx bx-edit'></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger delete-course" 
-                                            data-id="<?= $course->id ?>" 
+                                    <button class="btn btn-sm btn-danger delete-course_unit" 
+                                            data-id="<?= $course_unit->id ?>" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#deleteCourseModal">
+                                            data-bs-target="#deleteCourseUnitModal">
                                         <i class='bx bx-trash'></i>
                                     </button>
                                 </td>
@@ -94,7 +97,7 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="4" class="text-center">No course found</td>
+                                <td colspan="4" class="text-center">No course unit found</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -105,7 +108,7 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
 </main>
 
 <!-- Add Course Modal -->
-<div class="modal fade" id="addCourseModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="addCourseUnitModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -117,18 +120,23 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                     
                     <div class="mb-3">
                         <label for="courseName" class="form-label">Course Name</label>
-                        <input type="text" class="form-control" id="courseName" name="course_name" placeholder="Name" required>
+                        <input type="text" class="form-control" id="courseName" name="name" placeholder="Name" required>
                     </div>
 
                     <div class="col-md-12 mb-3">
                         <label for="courseCode" class="form-label">Course Code</label>
-                        <input type="text" class="form-control" id="courseCode" name="course_code" placeholder="Code" required>
+                        <input type="text" class="form-control" id="courseCode" name="code" placeholder="Code" required>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label for="creditUnits" class="form-label">Credit Units</label>
+                        <input type="text" class="form-control" id="creditUnits" name="credit_units" placeholder="Credit Units" required>
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="add_course" class="btn btn-primary">Save Course</button>
+                    <button type="submit" name="add_course_unit" class="btn btn-primary">Save Course</button>
                 </div>
             </form>
         </div>
@@ -136,7 +144,7 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
 </div>
 
 <!-- Edit Course Modal -->
-<div class="modal fade" id="editCourseModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editCourseUnitModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -145,16 +153,16 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
             </div>
             <form method="POST" action="">
                 <div class="modal-body">
-                    <input type="hidden" id="editCourseId" name="course_id">
+                    <input type="hidden" id="editCourseUnitId" name="id">
                     
                     <div class="mb-3">
-                        <label for="editCourseName" class="form-label">Course Unit Name</label>
-                        <input type="text" class="form-control" id="editCourseName" name="course_name" required>
+                        <label for="editCourseUnitName" class="form-label">Course Unit Name</label>
+                        <input type="text" class="form-control" id="editCourseUnitName" name="name" required>
                     </div>
 
                     <div class="col-md-12 mb-3">
                         <label for="editCourseUnitCode" class="form-label">Course Unit Code</label>
-                        <input type="text" class="form-control" id="editCourseUnitCode" name="course_code" required>
+                        <input type="text" class="form-control" id="editCourseUnitCode" name="code" required>
                     </div>
 
                     <div class="col-md-12 mb-3">
@@ -165,7 +173,7 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="edit_course" class="btn btn-primary">Update Course</button>
+                    <button type="submit" name="edit_course_unit" class="btn btn-primary">Update Course</button>
                 </div>
             </form>
         </div>
@@ -173,7 +181,7 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteCourseModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="deleteCourseUnitModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -183,11 +191,11 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
             <form method="POST" action="">
                 <div class="modal-body">
                     <p>Are you sure you want to delete this course?</p>
-                    <input type="hidden" id="deleteCourseId" name="course_id">
+                    <input type="hidden" id="deleteCourseUnitId" name="id">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" name="delete_course" class="btn btn-danger deleteBtn">Delete</button>
+                    <button type="submit" name="delete_course_unit" class="btn btn-danger deleteBtn">Delete</button>
                 </div>
             </form>
         </div>
@@ -200,19 +208,20 @@ include('footer.php');
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Edit course - populate modal with data
-    document.querySelectorAll('.edit-course').forEach(button => {
+    // Edit course unit - populate modal with data
+    document.querySelectorAll('.edit-course_unit').forEach(button => {
         button.addEventListener('click', function() {
-            document.getElementById('editCourseId').value = this.getAttribute('data-id');
-            document.getElementById('editCourseCode').value = this.getAttribute('data-code');
-            document.getElementById('editCourseName').value = this.getAttribute('data-name');
+            document.getElementById('editCourseUnitId').value = this.getAttribute('data-id');
+            document.getElementById('editCourseUnitCode').value = this.getAttribute('data-code');
+            document.getElementById('editCourseUnitName').value = this.getAttribute('data-name');
+            document.getElementById('editCreditUnits').value = this.getAttribute('data-unit');
         });
     });
 
-    // Delete course - set the ID
-    document.querySelectorAll('.delete-course').forEach(button => {
+    // Delete course unit - set the ID
+    document.querySelectorAll('.delete-course_unit').forEach(button => {
         button.addEventListener('click', function() {
-            document.getElementById('deleteCourseId').value = this.getAttribute('data-id');
+            document.getElementById('deleteCourseUnitId').value = this.getAttribute('data-id');
         });
     });
 });
