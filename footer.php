@@ -37,6 +37,8 @@
         const parentMenus = {
             'view-results.php': 'results',
             'semester-results.php': 'results',
+            'course.php': 'course',
+            'course_units.php': 'course',
             'generate-reports.php': 'reports',
             'export-results.php': 'reports',
             'submit-complaint.php': 'complaints',

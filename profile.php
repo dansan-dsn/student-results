@@ -95,6 +95,36 @@ if (isset($_POST['update_profile'])) {
     }
 }
 
+// change password
+if(isset($_POST['change_password'])){
+    $current_pwd = $_POST['current_password'];
+    $new_pwd = $_POST['new_password'];
+    $confirm_pwd = $_POST['confirm_password'];
+
+    $stmt = $dbh->prepare("SELECT password FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch(PDO::FETCH_OBJ);
+    if($user && password_verify($current_pwd, $user->password)){
+        if($new_pwd === $confirm_pwd){
+            $hashed_new_pwd = password_hash($new_pwd, PASSWORD_DEFAULT);
+            $stmt = $dbh->prepare("UPDATE users SET password = ? WHERE id =?");
+            $stmt->execute([$hashed_new_pwd, $user_id]);
+            $success_msg = "Password successfully changed!";
+            header("Location: profile.php?status=success&message=$success_msg");
+            exit();
+        } else {
+            $error_msg = "New password and confirmation do not match.";
+            header("Location: profile.php?status=error&message=$error_msg");
+            exit();
+        }
+    } else {
+        $error_msg = "Current password is incorrect.";
+        header("Location: profile.php?status=error&message=$error_msg");
+        exit();
+    }
+
+}
+
 ?>
 
 <main class="container">
@@ -167,10 +197,6 @@ if (isset($_POST['update_profile'])) {
                 <div class="detail-section staff-fields">
                     <h3 class="section-title">Employment Information</h3>
                     <div class="detail-row">
-                        <span class="detail-label">Staff ID:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->staffId)?></span>
-                    </div>
-                    <div class="detail-row">
                         <span class="detail-label">Department:</span>
                         <span class="detail-value"><?= htmlspecialchars($role_data->department) ?: 'N/A'?></span>
                     </div>
@@ -187,7 +213,7 @@ if (isset($_POST['update_profile'])) {
                 <button class="btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                     <i class='bx bx-edit'></i> Edit Profile
                 </button>
-                <button class="btn-change-password">
+                <button class="btn-change-password" data-bs-toggle="offcanvas" data-bs-target="#changePasswordOffcanvas">
                     <i class='bx bx-lock-alt'></i> Change Password
                 </button>
             </div>
@@ -292,6 +318,41 @@ if (isset($_POST['update_profile'])) {
     </div>
 </div>
 
+<!-- change password offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="changePasswordOffcanvas" aria-labelledby="changePasswordOffcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="changePasswordOffcanvasLabel">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form id="changePasswordForm" method="POST" action="">
+            <input type="hidden" name="user_id" value="<?= $user_id ?>">
+            
+            <div class="mb-3">
+                <label for="currentPassword" class="form-label">Current Password</label>
+                <input type="password" class="form-control" id="currentPassword" name="current_password" required>
+                <div class="invalid-feedback">Please enter your current password</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="newPassword" class="form-label">New Password</label>
+                <input type="password" class="form-control" id="newPassword" name="new_password" required>
+                <div class="invalid-feedback">Please enter a new password</div>
+                <small class="form-text text-muted">Minimum 8 characters, at least 1 uppercase, 1 lowercase, and 1 number</small>
+            </div>
+            
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                <div class="invalid-feedback">Passwords must match</div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" name="change_password">Update Password</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <?php
 ob_end_flush();

@@ -313,3 +313,81 @@
         border-radius: 0;
     }
 }
+
+/* Dark Theme Change Password Offcanvas */
+/* Updated Offcanvas with specific height and margins */
+.offcanvas-end {
+    width: 400px;
+    max-width: 90%;
+    background-color: var(--tertiary-bg-color);
+    border-left: 1px solid #2d2d3d;
+    
+    /* New positioning properties */
+    position: fixed;
+    top: 50%;
+    left: auto;
+    right: 20px; /* Space from right edge */
+    bottom: auto;
+    transform: translateY(-50%) translateX(100%);
+    height: auto;
+    max-height: 80vh; /* Maximum 80% of viewport height */
+}
+
+/* When shown */
+.offcanvas.show:not(.hiding) {
+    transform: translateY(-50%) translateX(0);
+}
+
+.offcanvas-header {
+    border-bottom: 1px solid #2d2d3d;
+    background-color: var(--tertiary-bg-color);
+    color: #e1e1e1;
+}
+
+.offcanvas-body {
+    background-color: var(--tertiary-bg-color);
+    color: #e1e1e1;
+    overflow-y: auto;
+    max-height: calc(80vh - 57px); /* Subtract header height */
+}
+
+/* Rest of your styles remain the same */
+#changePasswordForm .form-label {
+    color: #d1d1d1;
+}
+
+#changePasswordForm .form-control {
+    background-color: var(--bg-color);
+    border-color: var(--txt-color);
+    color: #f8f9fa;
+}
+
+#changePasswordForm .form-control:focus {
+    background-color: var(--bg-color);
+    border-color: var(--light-txt-color);
+    color: #f8f9fa;
+    box-shadow: 0 0 0 0.25rem var(--primary-hover);
+}
+
+#changePasswordForm .form-control.is-invalid {
+    border-color: #dc3545;
+    background-color: var(--bg-color);
+}
+
+#changePasswordForm .invalid-feedback {
+    color: #ff6b6b;
+}
+
+#changePasswordForm .form-text {
+    color: #8a8a9a !important;
+}
+
+#changePasswordForm .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+#changePasswordForm .btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}

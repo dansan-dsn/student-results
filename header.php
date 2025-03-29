@@ -110,7 +110,6 @@ try {
     
     <!-- Dashboard Section -->
     <div class="menu-section">
-        <h6 class="menu-category">DASHBOARD</h6>
         <ul>
             <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php' && empty($_GET['page'])) ? 'active' : ''; ?>">
                 <a href="index.php">
@@ -122,7 +121,6 @@ try {
 
     <!-- Results Section -->
     <div class="menu-section">
-        <h6 class="menu-category">RESULTS</h6>
         <ul>
             <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['view-results.php', 'semester-results.php'])) ? 'active' : ''; ?>">
                 <a href="javascript:void(0);" onclick="toggleSubmenu('results')">
@@ -141,9 +139,28 @@ try {
         </ul>
     </div>
 
+    <!-- Course Section -->
+    <div class="menu-section">
+        <ul>
+            <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['course.php', 'course_units.php'])) ? 'active' : ''; ?>">
+                <a href="javascript:void(0);" onclick="toggleSubmenu('course')">
+                    <i class='bx bxs-file-pdf'></i> Course
+                    <i class='bx bx-chevron-down' id="course-chevron"></i>
+                </a>
+                <ul id="course-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['course.php', 'course_units.php'])) ? 'block' : 'none'; ?>;">
+                    <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'course.php') ? 'active' : ''; ?>">
+                        <a href="course.php">Main Courses</a>
+                    </li>
+                    <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'course_units.php') ? 'active' : ''; ?>">
+                        <a href="course_units.php">Course Units</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
     <!-- Reports Section -->
     <div class="menu-section">
-        <h6 class="menu-category">REPORTS</h6>
         <ul>
             <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['generate-reports.php', 'export-results.php'])) ? 'active' : ''; ?>">
                 <a href="javascript:void(0);" onclick="toggleSubmenu('reports')">
@@ -154,9 +171,9 @@ try {
                     <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'generate-reports.php') ? 'active' : ''; ?>">
                         <a href="generate-reports.php">Generate Reports</a>
                     </li>
-                    <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'export-results.php') ? 'active' : ''; ?>">
+                    <!-- <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'export-results.php') ? 'active' : ''; ?>">
                         <a href="export-results.php">Export to Excel</a>
-                    </li>
+                    </li> -->
                 </ul>
             </li>
         </ul>
@@ -164,7 +181,6 @@ try {
 
     <!-- Complaints Section -->
     <div class="menu-section">
-        <h6 class="menu-category">COMPLAINTS</h6>
         <ul>
             <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['submit-complaint.php', 'complaint-status.php'])) ? 'active' : ''; ?>">
                 <a href="javascript:void(0);" onclick="toggleSubmenu('complaints')">
@@ -185,7 +201,6 @@ try {
 
     <!-- Room Management Section -->
     <div class="menu-section">
-        <h6 class="menu-category">ROOM MANAGEMENT</h6>
         <ul>
             <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['assign-seats.php', 'view-allocations.php', 'departments.php'])) ? 'active' : ''; ?>">
                 <a href="javascript:void(0);" onclick="toggleSubmenu('room-management')">
@@ -209,7 +224,6 @@ try {
 
     <!-- Account Section -->
     <div class="menu-section">
-        <h6 class="menu-category">ACCOUNT</h6>
         <ul>
             <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'profile.php') ? 'active' : ''; ?>">
                 <a href="profile.php">
