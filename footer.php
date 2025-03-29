@@ -8,6 +8,12 @@
     <!--  custom js links  -->
     <script src="assets/js/header.js"></script>
 
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <!-- aside menu and submenu -->
     <script>
     function toggleSubmenu(id) {
         const submenu = document.getElementById(`${id}-submenu`);
@@ -58,6 +64,41 @@ function basename(path) {
 if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
+
 </script>
+
+<script>
+    
+    // success and error alert
+    document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    const message = urlParams.get('message');
+
+    if (status && message) {
+        const iconColor = status === "success" ? "#3e8e41" : "#ff0000";
+        Swal.fire({
+            position: 'top-end',
+            icon: status === 'success' ? 'success' : 'error',
+            title: status === 'success' ? 'Success!' : 'Error!',
+            text: message,
+            showConfirmButton: false,
+            timer: 3000,
+            toast: true, // Enable toast mode
+            customClass: {
+                popup: 'small-toast' // Custom class for the toast
+            },
+            background: '#22252a',
+            color: '#fff', 
+            iconColor: iconColor // Set icon color based on success or error,
+        }).then(() => {
+            const cleanUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState(null, null, cleanUrl);
+        });
+    }
+});
+
+</script>
+
 </body>
 </html>

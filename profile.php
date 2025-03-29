@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include('header.php');
 
 $user_id = $_SESSION['user_id'];
@@ -15,6 +16,8 @@ try {
 }catch(PDOException $e){
     error_log("Database error (users table): " . $e->getMessage());
     $error_msg = "Error loading user data";
+    header("Location: profile.php?status=success&error=$error_msg");
+    exit();
 }
 
 // Fetch data by role
@@ -33,6 +36,8 @@ try {
 } catch (PDOException $e) {
     error_log("Database error (role table): " . $e->getMessage());
     $error_msg = "Error loading profile data";
+    header("Location: profile.php?status=success&error=$error_msg");
+    exit();
 }
 
 // department access
@@ -42,12 +47,14 @@ try {
 } catch(PDOException $e) {
     error_log("Database error (department table): " . $e->getMessage());
     $error_msg = "Error loading department data";
+    header("Location: profile.php?status=success&error=$error_msg");
+    exit();
 }
 
 // Handle Profile Update
 if (isset($_POST['update_profile'])) {
     try{
-        // $dbh->beginTransaction();
+        $dbh->beginTransaction();
 
         // update the email
         $new_email = $_POST['email'];
@@ -76,14 +83,15 @@ if (isset($_POST['update_profile'])) {
         }
         $dbh->commit();
         $success_msg = "Profile successfully updated!";
-        sleep(2); 
-        header("Location: profile.php?updated=1");
+        header("Location: profile.php?status=success&message=$success_msg");
         exit();
 
     } catch (PDOException $e) {
-        // $dbh->rollBack();
+        $dbh->rollBack();
         error_log("Database error" . $e->getMessage());
-        $error_msg = "";
+        $error_msg = $e->getMessage();
+        header("Location: profile.php?status=error&message=$error_msg");
+        exit();
     }
 }
 
@@ -93,14 +101,6 @@ if (isset($_POST['update_profile'])) {
 
     <div class="main-view">
         <div class="profile-container">
-
-            <?php if ($success_msg): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success_msg) ?></div>
-            <?php endif; ?>
-            
-            <?php if ($error_msg): ?>
-                <div class="alert alert-danger"><?= htmlspecialchars($error_msg) ?></div>
-            <?php endif; ?>
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="profile-avatar">
@@ -294,5 +294,6 @@ if (isset($_POST['update_profile'])) {
 
 
 <?php
+ob_end_flush();
 include('footer.php');
 ?>

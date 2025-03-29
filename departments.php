@@ -1,7 +1,6 @@
 <?php
-include('header.php');
-
 ob_start();
+include('header.php');
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -13,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':name' => $_POST['department_name'],
                 ':head' => $_POST['department_head']
             ]);
+            header("Location: departments.php?status=success&message=Created successful");
+            exit();
             
         } elseif (isset($_POST['edit_department'])) {
             // Update department
@@ -22,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':name' => $_POST['department_name'],
                 ':head' => $_POST['department_head']
             ]);
+            header("Location: departments.php?status=success&message=Updated successfully");
+            exit();
             
         } elseif (isset($_POST['delete_department'])) {
             // Delete department
@@ -29,27 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([':id' => $_POST['department_id']]);
         }
         
-        // Redirect to prevent form resubmission
-        ob_end_clean();
-        header("Location: ". strtok($_SERVER["REQUEST_URI"], '?'));
-        exit();
-        
     } catch (PDOException $e) {
-        $error = "Database error: " . $e->getMessage();
-        ob_end_flush();
+        header("Location: departments.php?status=error&message=Database error: " . $e->getMessage());
     }
 }
 
 // Get all departments using PDO objects
 $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")->fetchAll(PDO::FETCH_OBJ);
-ob_end_flush();
 ?>
 
 <main class="container">
-    <?php if (isset($error)): ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
-    
     <div class="main-view">
         <div class="department-container">
             <!-- Department Header with Add Button -->
@@ -185,7 +177,7 @@ ob_end_flush();
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" name="delete_department" class="btn btn-danger">Delete</button>
+                    <button type="submit" name="delete_department" class="btn btn-danger deleteBtn">Delete</button>
                 </div>
             </form>
         </div>
@@ -193,6 +185,7 @@ ob_end_flush();
 </div>
 
 <?php
+ob_end_flush();
 include('footer.php');
 ?>
 
