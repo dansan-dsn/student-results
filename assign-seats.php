@@ -2,6 +2,8 @@
 ob_start();
 include('header.php');
 
+$status = 'pending';
+
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if (isset($_POST['add_room'])) {
@@ -27,6 +29,28 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             header('Location: assign-seats.php?status=success&message=Updated successfully!');
             exit();
+        }elseif(isset($_POST['assign_room'])){
+            $stmt = $dbh->prepare("INSERT INTO room_allocation (course_unit, room, date, start_time) VALUES (:course_unit, :room, :date, :start_time)");
+            $success_insersation = $stmt->execute([
+                ':course_unit' => $_POST['course_unit'],
+                ':room' => $_POST['room'],
+                ':date' => $_POST['date'],
+                ':start_time' => $_POST['start_time'],
+            ]);
+
+            if($success_insersation) {
+                $stmt = $dbh->prepare("UPDATE room_allocation SET status = :status WHERE course_unit = :course_unit AND room = :room AND date = :date AND start_time = :start_time");
+                $stmt->execute([
+                    ':status' => $status,
+                    ':course_unit' => $_POST['course_unit'],
+                    ':room' => $_POST['room'],
+                    ':date' => $_POST['date'],
+                    ':start_time' => $_POST['start_time'],
+                ]);
+            }
+            
+            header("Location: view-allocations.php?status=success&message=Assigned successfully!");
+            exit();
         }
 
     }catch(PDOException $e) {
@@ -45,6 +69,15 @@ try {
     exit();
 }
 
+// fetch room data
+try {
+    $course_units = $dbh->query("SELECT * FROM course_unit ORDER BY name")->fetchAll(PDO::FETCH_OBJ);
+}catch (PDOException $e){
+    $error_msg = $e->getMessage();
+    header("Location: assign-seats.php?status=error&message=$error_msg");
+    exit();
+}
+
 ?>
 
 <main class="container">
@@ -52,103 +85,111 @@ try {
         <div class="department-container">
         <div class="department-header">
                 <h2 class="department-title">
-                    <i class='bx bx-building-house'></i> Assign Seats
+                    <i class='bx bx-building-house'></i> Assign Rooms
                 </h2>
                 <div style="display: flex; gap: 5px;">
                     <button class="btn btn-sm btn-add-department" data-bs-toggle="modal" data-bs-target="#addRoomModal">
                     <i class='bx bx-plus-circle'></i> Add Room
                     </button>
-                    <button class="btn btn-sm btn-add-department" style="background-color: #314173;" data-bs-toggle="modal" data-bs-target="#ViewRoomModal">
+                    <!-- <button class="btn btn-sm btn-add-department" style="background-color: #314173;" data-bs-toggle="modal" data-bs-target="#ViewRoomModal">
                      View Rooms
-                    </button>
+                    </button> -->
                 </div>
             </div>
             
             <div class="row">
-                <!-- Department/Exam Selection -->
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Assignment Controls</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="examSelect" class="form-label">Select Exam</label>
-                                <select class="form-select" id="examSelect">
-                                    <option selected disabled>Choose an exam</option>
-                                    <option value="1">CS101 - Final Exam</option>
-                                    <option value="2">MATH201 - Midterm</option>
-                                    <option value="3">PHY301 - Practical</option>
-                                </select>
+                <!-- Exam Selection -->
+                    <div class="col-md-4">
+                        <form method="POST" action="">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">Assignment Controls</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="course_unit" class="form-label">Select Exam</label>
+                                        <select class="form-select" id="course_unit" name="course_unit">
+                                            <option selected disabled>Choose an exam</option>
+                                            <?php foreach($course_units as $unit): ?>
+                                                <option value="<?=$unit->id; ?>"> <?= htmlspecialchars($unit->name);?> (<?= htmlspecialchars($unit->code);?>)</option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Choose Room</label>
+                                        <select class="form-select" id="" name="room">
+                                            <option value="" selected disabled>Select room</option>
+                                            <?php foreach($rooms as $room): ?>
+                                                <option value="<?=$room->id; ?>"> <?= htmlspecialchars($room->room_name);?> </option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date" class="form-label">Start Date</label>
+                                        <input type="date" class="form-control" id="date" name="date" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="start_time" class="form-label">Start Time</label>
+                                        <input type="time" class="form-control" id="start_time" name="start_time" required>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-success" name="assign_room">Assign to Students</button>
+                                    </div>
+                                </div>
                             </div>
-            
-                            <div class="mb-3">
-                                <label for="roomSelect" class="form-label">Select Room</label>
-                                <select class="form-select" id="roomSelect">
-                                    <option selected disabled>Choose a room</option>
-                                    <option value="1">Grand Hall (Capacity: 120)</option>
-                                    <option value="2">Science Block A (Capacity: 80)</option>
-                                    <option value="3">Lecture Theater 3 (Capacity: 60)</option>
-                                </select>
-                            </div>
-            
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary" id="loadRoomBtn">Load Room Layout</button>
-                                <button class="btn btn-success" id="autoAssignBtn">Auto-Assign Students</button>
-                                <button class="btn btn-danger" id="clearAssignmentsBtn">Clear Assignments</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
-            
-                    <div class="card shadow-sm mt-3">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0">Unassigned Students</h5>
-                        </div>
-                        <div class="card-body" id="unassignedStudents">
-                            <div class="list-group">
-                                <!-- This will be populated dynamically -->
-                                <div class="list-group-item">No students loaded</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             
                 <!-- Room Layout -->
                 <div class="col-md-8">
                     <div class="card shadow-sm">
                         <div class="card-header bg-secondary text-white">
-                            <h5 class="mb-0">Room Layout</h5>
+                            <h5 class="mb-0">Room Data Layout</h5>
                         </div>
                         <div class="card-body">
-                            <div class="alert alert-info" id="roomInstructions">
-                                Select an exam and room to begin assignments
-                            </div>
-            
-                            <!-- Visual Room Layout -->
-                            <div class="room-layout-container" id="roomLayout" style="display: none;">
-                                <div class="room-header text-center mb-3">
-                                    <h4 id="roomTitle">Grand Hall</h4>
-                                    <div class="d-flex justify-content-between">
-                                        <span class="badge bg-primary">Front</span>
-                                        <span class="badge bg-success">Capacity: <span id="roomCapacity">120</span></span>
-                                    </div>
-                                </div>
-            
-                                <!-- Seat Grid -->
-                                <div class="seat-grid" id="seatGrid">
-                                    <!-- Seats will be generated here dynamically -->
-                                    <div class="text-center py-5 text-muted">No room selected</div>
-                                </div>
-            
-                                <!-- Legend -->
-                                <div class="mt-3">
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <span class="badge bg-success">Available</span>
-                                        <span class="badge bg-primary">Assigned</span>
-                                        <span class="badge bg-secondary">Reserved</span>
-                                        <span class="badge bg-danger">Disabled</span>
-                                    </div>
-                                </div>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No.</th>
+                                        <th scope="col">Room Name</th>
+                                        <th scope="col">Room Capacity</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (count($rooms) > 0): ?>
+                                        <?php foreach ($rooms as $index => $room): ?>
+                                        <tr>
+                                            <th scope="row"><?= $index + 1 ?></th>
+                                            <td><?= htmlspecialchars($room->room_name) ?></td>
+                                            <td><?= htmlspecialchars($room->capacity) ?></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary me-1 edit-room" 
+                                                        data-id="<?= $room->id ?>" 
+                                                        data-name="<?= htmlspecialchars($room->room_name) ?>" 
+                                                        data-capacity="<?= htmlspecialchars($room->capacity) ?>" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#editRoomModal">
+                                                    <i class='bx bx-edit'></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger delete-room" 
+                                                        data-id="<?= $room->id ?>" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#deleteRoomModal">
+                                                    <i class='bx bx-trash'></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="4" class="text-center">No Room found</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
                             </div>
                         </div>
                     </div>
@@ -189,64 +230,6 @@ try {
                     <button type="submit" name="add_room" class="btn btn-primary">Save Room</button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-<!-- View Room -->
-<div class="modal fade" id="ViewRoomModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Room Data View</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                 <!-- Room Table -->
-            <div class="table-responsive">
-                <table class="table table-dark table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">No.</th>
-                            <th scope="col">Room Name</th>
-                            <th scope="col">Room Capacity</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($rooms) > 0): ?>
-                            <?php foreach ($rooms as $index => $room): ?>
-                            <tr>
-                                <th scope="row"><?= $index + 1 ?></th>
-                                <td><?= htmlspecialchars($room->room_name) ?></td>
-                                <td><?= htmlspecialchars($room->capacity) ?></td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary me-1 edit-room" 
-                                            data-id="<?= $room->id ?>" 
-                                            data-name="<?= htmlspecialchars($room->room_name) ?>" 
-                                            data-capacity="<?= htmlspecialchars($room->capacity) ?>" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#editRoomModal">
-                                        <i class='bx bx-edit'></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger delete-room" 
-                                            data-id="<?= $room->id ?>" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#deleteRoomModal">
-                                        <i class='bx bx-trash'></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="4" class="text-center">No Room found</td>
-                                </tr>
-                            <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-            </div>
         </div>
     </div>
 </div>

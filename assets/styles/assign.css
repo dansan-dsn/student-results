@@ -1,0 +1,33 @@
+/* Form Elements */
+ .form-label {
+    color: var(--txt-color);
+    margin-bottom: 0.5rem;
+}
+
+ .form-control,
+ .form-select {
+    background-color: var(--bg-color);
+    color: var(--light-txt-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0.75rem;
+    transition: all 0.3s ease;
+}
+
+/* Style the first option (placeholder) with darker opacity */
+ .form-select:first-child {
+    color: rgba(77, 75, 75, 0.6); /* 60% opacity black */
+    font-style: italic; /* Optional: make it italic */
+}
+
+/* Style the other options normally */
+/*  .form-select:not(:first-child) {
+    color: rgb(90, 88, 88);
+} */
+
+ .form-control:focus,
+ .form-select:focus {
+    background-color: var(--bg-color);
+    color: var(--light-txt-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+}

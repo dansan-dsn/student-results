@@ -51,6 +51,16 @@ try {
     exit();
 }
 
+// course access
+try {
+    $courses = $dbh->query("SELECT id, course_name FROM course")->fetchAll(PDO::FETCH_OBJ);
+}catch(PDOException $e) {
+    error_log("Database error (course table): " . $e->getMessage());
+    $error_msg = "Error loading course data";
+    header("Location: profile.php?status=success&error=$error_msg");
+    exit();
+}
+
 // Handle Profile Update
 if (isset($_POST['update_profile'])) {
     try{
@@ -78,8 +88,8 @@ if (isset($_POST['update_profile'])) {
             $student_no = $_POST['student_no'];
             $nationality = $_POST['nationality'];
 
-            $stmt = $dbh->prepare('UPDATE students SET name = ?, student_no = ?, reg_no = ?, date_of_birth = ?, gender = ?, nationality = ? WHERE studentId = ?');
-            $stmt->execute([$new_name, $student_no, $reg_no, $date_of_birth, $gender, $nationality, $user_id]);
+            $stmt = $dbh->prepare('UPDATE students SET name = ?, student_no = ?, reg_no = ?, course = ?, department = ?, date_of_birth = ?, gender = ?, nationality = ? WHERE studentId = ?');
+            $stmt->execute([$new_name, $student_no, $reg_no, $_POST['course'], $_POST['department'], $date_of_birth, $gender, $nationality, $user_id]);
         }
         $dbh->commit();
         $success_msg = "Profile successfully updated!";
@@ -186,6 +196,14 @@ if(isset($_POST['change_password'])){
                         <span class="detail-value"><?= htmlspecialchars($role_data->reg_no)?></span>
                     </div>
                     <div class="detail-row">
+                        <span class="detail-label">Course:</span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->course) ?: 'N/A'?></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Department:</span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->department) ?: 'N/A'?></span>
+                    </div>
+                    <div class="detail-row">
                         <span class="detail-label">Nationality:</span>
                         <span class="detail-value"><?= htmlspecialchars($role_data->nationality)?></span>
                     </div>
@@ -281,14 +299,26 @@ if(isset($_POST['change_password'])){
                                    value="<?= htmlspecialchars($role_data->reg_no ?? '') ?>">
                         </div>
                     </div>
-                    
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="course" class="form-label">Course</label>
+                            <select class="form-select" id="course" name="course">
+                                <option value="" selected disabled>Select Course</option>
+                                <?php foreach($courses as $course): ?>
+                                    <option value="<?=$course->course_name; ?>" <?= ($role_data->course == $course->course_name) ? 'selected' : '';?> > <?= htmlspecialchars($course->course_name);?> </option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <label for="nationality" class="form-label">Nationality</label>
                         <input type="text" class="form-control" id="nationality" name="nationality" 
                                value="<?= htmlspecialchars($role_data->nationality ?? '') ?>">
                     </div>
-                    
-                    <?php elseif ($role == 'staff'): ?>
+                    <?php endif; ?>
+
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="department" class="form-label">Department</label>
@@ -300,6 +330,8 @@ if(isset($_POST['change_password'])){
                             </select>
                         </div>
                     </div>
+                    
+                    <?php if ($role == 'staff'): ?>
                     
                     <div class="mb-3">
                         <label for="rank" class="form-label">Rank/Position</label>

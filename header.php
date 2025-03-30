@@ -61,6 +61,7 @@ try {
     <link rel="stylesheet" href="assets/styles/dashboard.css" >
     <link rel="stylesheet" href="assets/styles/profile.css">
     <link rel="stylesheet" href="assets/styles/departments.css" >
+    <link rel="stylesheet" href="assets/styles/assign.css">
 </head>
 <body>
 <div id="app">
@@ -209,7 +210,7 @@ try {
                 </a>
                 <ul id="room-management-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['assign-seats.php', 'view-allocations.php', 'departments.php'])) ? 'block' : 'none'; ?>;">
                     <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'assign-seats.php') ? 'active' : ''; ?>">
-                        <a href="assign-seats.php">Assign Seats</a>
+                        <a href="assign-seats.php">Assign Rooms</a>
                     </li>
                     <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'view-allocations.php') ? 'active' : ''; ?>">
                         <a href="view-allocations.php">View Allocations</a>
