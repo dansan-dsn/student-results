@@ -37,8 +37,8 @@ try{
                cu.name AS course_name,
                cu.code AS course_code
         FROM room_allocation ra
-        JOIN room r on ra.room_id = r.id
-        JOIN course_unit cu ON ra.course_unit_id = cu.id
+        LEFT JOIN room r on ra.room_id = r.id
+        LEFT JOIN course_unit cu ON ra.course_unit_id = cu.id
         ORDER BY ra.date DESC
     ")->fetchAll(PDO::FETCH_OBJ);
 }catch(PDOException $e){
@@ -96,7 +96,7 @@ try {
                             <?php foreach ($allocations as $index => $allocation): ?>
                             <tr>
                                 <th scope="row"><?= $index + 1 ?></th>
-                                <td><?= htmlspecialchars($allocation->course_name) ?></td>
+                                <td><?= htmlspecialchars($allocation->course_name) ?> (<?= htmlspecialchars($allocation->course_code)?>)</td>
                                 <td><?= htmlspecialchars($allocation->room_name) ?></td>
                                 <td><?= htmlspecialchars($allocation->date) ?> <span style="color: red; font-weight: bold">[ <?= htmlspecialchars($allocation->start_time) ?> ]</span></td>
                                 <td>

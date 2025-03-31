@@ -1,5 +1,17 @@
 
 :root {
+    /* Light theme colors */
+    --light-bg-color: #f8f9fa;
+    --light-tertiary-bg: #e9ecef;
+    --light-text-color: #495057;
+    --light-heading-color: #212529;
+    --light-primary-color: #4CAF50; /* Keeping your existing green */
+    --light-primary-hover: #3e8e41; /* Keeping existing hover */
+    --light-active-bg: #e2f3e3; /* Very light green for active states */
+    --light-border-color: #dee2e6;
+    --light-card-bg: #ffffff;
+    
+    /* Dark theme colors (existing) */
     --bg-color: #17191c;
     --tertiary-bg-color: #22252a;
     --txt-color: #818898;

@@ -24,18 +24,45 @@ try {
 $role_data = [];
 try {
     if($role === 'student') {
-        $stmt = $dbh->prepare("SELECT * FROM students WHERE studentId = ?");
-    } elseif ($role === 'staff') {
-        $stmt = $dbh->prepare("SELECT * FROM staff WHERE staffId = ?");
+
+        $stmt = $dbh->prepare("
+        SELECT std.*, dp.department_name AS dpt_name, c.course_name AS course_name
+        FROM students std
+        LEFT JOIN department dp ON std.department = dp.id
+        LEFT JOIN course c ON std.course = c.id
+        WHERE studentId = ?"
+    );
+
+    $stmt->execute([$user_id]);
+
+    $role_data = $stmt->fetch(PDO::FETCH_OBJ);
+    error_log("DEBUG: Student data: " . print_r($role_data, true));
+
+    if(!$role_data) {
+        die("DEBUG: No student record found for ID: $user_id");
     }
 
-    if (isset($stmt)) {
-        $stmt->execute([$user_id]);
-        $role_data = $stmt->fetch(PDO::FETCH_OBJ) ?: [];
+    } elseif ($role === 'staff') {
+
+        $stmt = $dbh->prepare("
+        SELECT st.*, dp.department_name AS dpt_name
+        FROM staff st
+        LEFT JOIN department dp ON st.department = dp.id
+        WHERE staffId = ?"
+    );
+
+    $stmt->execute([$user_id]);
+    $role_data = $stmt->fetch(PDO::FETCH_OBJ);
+
+    } else {
+        throw new Exception("Invalid user role: $role");
     }
+
 } catch (PDOException $e) {
     error_log("Database error (role table): " . $e->getMessage());
     $error_msg = "Error loading profile data";
+    // Temporarily add this before the redirect to see the actual query error
+    die("Database Error: " . $e->getMessage() . " | Role: $role | User ID: $user_id");
     header("Location: profile.php?status=success&error=$error_msg");
     exit();
 }
@@ -147,7 +174,7 @@ if(isset($_POST['change_password'])){
                     <i class='bx bxs-user-circle'></i>
                 </div>
                 <div class="profile-info">
-                    <h2 class="profile-name"><?= htmlspecialchars($role_data->name)?></h2>
+                    <h2 class="profile-name"><?= htmlspecialchars($role_data->name) ?: 'N/A'?></h2>
                     <p class="profile-role">
 
                         <?php if ($role == 'student'): ?>
@@ -167,19 +194,19 @@ if(isset($_POST['change_password'])){
                     <h3 class="section-title">Personal Information</h3>
                     <div class="detail-row">
                         <span class="detail-label">Full Name:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->name)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->name) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Email:</span>
-                        <span class="detail-value"><?= htmlspecialchars($user_email)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($user_email) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Date of Birth:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->date_of_birth)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->date_of_birth) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Gender:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->gender)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->gender) ?: 'N/A'?></span>
                     </div>
                 </div>
 
@@ -189,23 +216,23 @@ if(isset($_POST['change_password'])){
                     <h3 class="section-title">Academic Information</h3>
                     <div class="detail-row">
                         <span class="detail-label">Student Number:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->student_no)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->student_no) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Registration Number:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->reg_no)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->reg_no) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Course:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->course) ?: 'N/A'?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->course_name) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Department:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->department) ?: 'N/A'?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->dpt_name) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Nationality:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->nationality)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->nationality) ?: 'N/A'?></span>
                     </div>
                 </div>
 
@@ -216,11 +243,11 @@ if(isset($_POST['change_password'])){
                     <h3 class="section-title">Employment Information</h3>
                     <div class="detail-row">
                         <span class="detail-label">Department:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->department) ?: 'N/A'?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->dpt_name) ?: 'N/A'?></span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Rank/Position:</span>
-                        <span class="detail-value"><?= htmlspecialchars($role_data->rank)?></span>
+                        <span class="detail-value"><?= htmlspecialchars($role_data->rank) ?: 'N/A'?></span>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -306,7 +333,7 @@ if(isset($_POST['change_password'])){
                             <select class="form-select" id="course" name="course">
                                 <option value="" selected disabled>Select Course</option>
                                 <?php foreach($courses as $course): ?>
-                                    <option value="<?=$course->course_name; ?>" <?= ($role_data->course == $course->course_name) ? 'selected' : '';?> > <?= htmlspecialchars($course->course_name);?> </option>
+                                    <option value="<?=$course->id; ?>" <?= ($role_data->course == $course->id) ? 'selected' : '';?> > <?= htmlspecialchars($course->course_name);?> </option>
                                 <?php endforeach;?>
                             </select>
                         </div>
@@ -325,7 +352,7 @@ if(isset($_POST['change_password'])){
                             <select class="form-select" id="department" name="department">
                                 <option value="" selected disabled>Select Department</option>
                                 <?php foreach($dept as $dpt): ?>
-                                    <option value="<?=$dpt->department_name; ?>" <?= ($role_data->department == $dpt->department_name) ? 'selected' : '';?> > <?= htmlspecialchars($dpt->department_name);?> </option>
+                                    <option value="<?=$dpt->id; ?>" <?= ($role_data->department == $dpt->id) ? 'selected' : '';?> > <?= htmlspecialchars($dpt->department_name);?> </option>
                                 <?php endforeach;?>
                             </select>
                         </div>

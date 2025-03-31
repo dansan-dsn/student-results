@@ -41,7 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // / Get all departments using PDO objects
 try {
-    $departments = $dbh->query("SELECT * FROM department ORDER BY department_name")->fetchAll(PDO::FETCH_OBJ);
+    $departments = $dbh->query("
+    SELECT dp.*,
+           st.name
+    FROM department dp
+    LEFT JOIN staff st ON dp.department_head = st.staffId
+    ORDER BY department_name")->fetchAll(PDO::FETCH_OBJ);
 } catch(PDOException $e) {
     error_log("Database error (department table): " . $e->getMessage());
     $error_msg = "Error loading staff data";
@@ -90,12 +95,12 @@ try {
                             <tr>
                                 <th scope="row"><?= $index + 1 ?></th>
                                 <td><?= htmlspecialchars($dept->department_name) ?></td>
-                                <td><?= htmlspecialchars($dept->department_head) ?></td>
+                                <td><?= htmlspecialchars($dept->name) ?></td>
                                 <td>
                                     <button class="btn btn-sm btn-primary me-1 edit-department" 
                                             data-id="<?= $dept->id ?>" 
                                             data-name="<?= htmlspecialchars($dept->department_name) ?>" 
-                                            data-head="<?= htmlspecialchars($dept->department_head) ?>" 
+                                            data-head="<?= $dept->department_head ?>" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#editDepartmentModal">
                                         <i class='bx bx-edit'></i>
@@ -141,7 +146,7 @@ try {
                         <select class="form-select" id="departmentHead" name="department_head">
                             <option value="" selected disabled>Select Department Head</option>
                             <?php foreach($staffs as $staff): ?>
-                                <option value="<?=$staff->name; ?>"> <?= htmlspecialchars($staff->name);?> </option>
+                                <option value="<?=$staff->staffId; ?>"> <?= htmlspecialchars($staff->name);?> </option>
                             <?php endforeach;?>
                         </select>
                     </div>
@@ -177,7 +182,7 @@ try {
                         <select class="form-select" id="editDepartmentHead" name="department_head">
                             <option value="" selected disabled>Select Department Head</option>
                             <?php foreach($staffs as $staff): ?>
-                                <option value="<?=$staff->name; ?>" <?= ($staff->name == $departments->department_head) ? 'selected' : '';?> > <?= htmlspecialchars($staff->name);?> </option>
+                                <option value="<?=$staff->staffId; ?>" <?= ($staff->staffId == $departments->department_head) ? 'selected' : '';?> > <?= htmlspecialchars($staff->name);?> </option>
                             <?php endforeach;?>
                         </select>
                     </div>
