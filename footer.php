@@ -21,92 +21,151 @@
 
     <!-- aside menu and submenu -->
     <script>
-    function toggleSubmenu(id) {
-        const submenu = document.getElementById(`${id}-submenu`);
-        const chevron = document.getElementById(`${id}-chevron`);
-        
-        submenu.classList.toggle('show');
-        chevron.classList.toggle('rotated');
-        
-        // Close other submenus
-        document.querySelectorAll('.submenu').forEach(menu => {
-            if (menu.id !== `${id}-submenu` && menu.classList.contains('show')) {
-                menu.classList.remove('show');
-                document.getElementById(menu.id.replace('-submenu', '-chevron'))?.classList.remove('rotated');
-            }
-        });
-    }
-
-    // Initialize submenus on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        const currentPage = basename(window.location.pathname);
-        const parentMenus = {
-            'view-results.php': 'results',
-            'semester-results.php': 'results',
-            'course.php': 'course',
-            'course_units.php': 'course',
-            'generate-reports.php': 'reports',
-            'export-results.php': 'reports',
-            'submit-complaint.php': 'complaints',
-            'complaint-status.php': 'complaints',
-            'assign-seats.php': 'room-management',
-            'view-allocations.php': 'room-management',
-            'departments.php': 'room-management'
-        };
-
-        if (parentMenus[currentPage]) {
-            const submenu = document.getElementById(`${parentMenus[currentPage]}-submenu`);
-            const chevron = document.getElementById(`${parentMenus[currentPage]}-chevron`);
-            if (submenu && chevron) {
-                submenu.classList.add('show');
-                chevron.classList.add('rotated');
-            }
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(`${id}-submenu`);
+            const chevron = document.getElementById(`${id}-chevron`);
+            
+            submenu.classList.toggle('show');
+            chevron.classList.toggle('rotated');
+            
+            // Close other submenus
+            document.querySelectorAll('.submenu').forEach(menu => {
+                if (menu.id !== `${id}-submenu` && menu.classList.contains('show')) {
+                    menu.classList.remove('show');
+                    document.getElementById(menu.id.replace('-submenu', '-chevron'))?.classList.remove('rotated');
+                }
+            });
         }
-    });
 
-// Helper function to get base filename
-function basename(path) {
-    return path.split('/').pop().split('?')[0];
-}
+        // Initialize submenus on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = basename(window.location.pathname);
+            const parentMenus = {
+                'view-results.php': 'results',
+                'semester-results.php': 'results',
+                'course.php': 'course',
+                'course_units.php': 'course',
+                'generate-reports.php': 'reports',
+                'export-results.php': 'reports',
+                'submit-complaint.php': 'complaints',
+                'complaint-status.php': 'complaints',
+                'assign-seats.php': 'room-management',
+                'view-allocations.php': 'room-management',
+                'departments.php': 'room-management'
+            };
 
-if ( window.history.replaceState ) {
-  window.history.replaceState( null, null, window.location.href );
-}
-
-</script>
-
-<script>
-    
-    // success and error alert
-    document.addEventListener('DOMContentLoaded', function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-    const message = urlParams.get('message');
-
-    if (status && message) {
-        const iconColor = status === "success" ? "#3e8e41" : "#ff0000";
-        Swal.fire({
-            position: 'top-end',
-            icon: status === 'success' ? 'success' : 'error',
-            title: status === 'success' ? 'Success!' : 'Error!',
-            text: message,
-            showConfirmButton: false,
-            timer: 3000, //3000
-            toast: true, // Enable toast mode
-            customClass: {
-                popup: 'small-toast' // Custom class for the toast
-            },
-            background: '#22252a',
-            color: '#fff', 
-            iconColor: iconColor // Set icon color based on success or error,
-        }).then(() => {
-            const cleanUrl = window.location.origin + window.location.pathname;
-            window.history.replaceState(null, null, cleanUrl);
+            if (parentMenus[currentPage]) {
+                const submenu = document.getElementById(`${parentMenus[currentPage]}-submenu`);
+                const chevron = document.getElementById(`${parentMenus[currentPage]}-chevron`);
+                if (submenu && chevron) {
+                    submenu.classList.add('show');
+                    chevron.classList.add('rotated');
+                }
+            }
         });
-    }
-});
 
-</script>
+        // Helper function to get base filename
+        function basename(path) {
+            return path.split('/').pop().split('?')[0];
+        }
+
+        if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+        }
+
+    </script>
+
+    <!-- alert modal messages -->
+    <script>
+        
+        // success and error alert
+        document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        const message = urlParams.get('message');
+
+            if (status && message) {
+                const iconColor = status === "success" ? "#3e8e41" : "#ff0000";
+                Swal.fire({
+                    position: 'top-end',
+                    icon: status === 'success' ? 'success' : 'error',
+                    title: status === 'success' ? 'Success!' : 'Error!',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 3000, //3000
+                    toast: true, // Enable toast mode
+                    customClass: {
+                        popup: 'small-toast' // Custom class for the toast
+                    },
+                    background: '#22252a',
+                    color: '#fff', 
+                    iconColor: iconColor // Set icon color based on success or error,
+                }).then(() => {
+                    const cleanUrl = window.location.origin + window.location.pathname;
+                    window.history.replaceState(null, null, cleanUrl);
+                });
+            }
+        });
+
+    </script>
+
+    <!-- for notifications -->
+    <script>
+        function markSingleNotificationAsRead(notificationId, element) {
+            event.preventDefault();
+            const originalHref = element.getAttribute('href');
+            
+            fetch('mark_notification_read.php?id=' + notificationId)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        // Update the UI immediately
+                        element.classList.remove('fw-bold');
+                        
+                        // Update badge count
+                        const badge = document.querySelector('.notification-badge');
+                        if (badge) {
+                            if (data.unread_count > 0) {
+                                badge.textContent = data.unread_count;
+                            } else {
+                                badge.remove();
+                            }
+                        }
+                        
+                        // Navigate to the page
+                        window.location.href = originalHref;
+                    } else {
+                        console.error('Failed to mark notification as read');
+                        window.location.href = originalHref;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    window.location.href = originalHref;
+                });
+        }
+
+        // Mark all related notifications as read when landing on a page
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.has('mark_all_read')) {
+                // Remove the parameter from URL without reload
+                history.replaceState(null, null, window.location.pathname);
+                
+                // Update UI for all notifications on this page
+                document.querySelectorAll('.bg-notification').forEach(el => {
+                    el.classList.remove('bg-notification');
+                    el.classList.add('bg-read');
+                });
+                
+                // Update badge count
+                const badge = document.querySelector('.notification-badge');
+                if (badge) {
+                    badge.remove();
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>

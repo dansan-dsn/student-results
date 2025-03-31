@@ -2,6 +2,17 @@
 ob_start();
 include('header.php');
 
+// Mark all related notifications as read when landing on this page
+if (isset($_GET['mark_all_read'])) {
+    markAllRelatedNotificationsAsRead($dbh, $_SESSION['user_id'], 'view-allocations.php');
+    
+    // Remove the parameter from URL
+    header("Location: view-allocations.php");
+    exit();
+}
+
+// Rest of your code...
+
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     try{
         if(isset($_POST['edit_allocation'])){

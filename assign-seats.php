@@ -30,23 +30,45 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: assign-seats.php?status=success&message=Updated successfully!');
             exit();
         }elseif(isset($_POST['assign_room'])){
-            $stmt = $dbh->prepare("INSERT INTO room_allocation (course_unit, room, date, start_time) VALUES (:course_unit, :room, :date, :start_time)");
+            $stmt = $dbh->prepare("INSERT INTO room_allocation (course_unit_id, room_id, date, start_time) VALUES (:course_unit_id, :room_id, :date, :start_time)");
             $success_insersation = $stmt->execute([
-                ':course_unit' => $_POST['course_unit'],
-                ':room' => $_POST['room'],
+                ':course_unit_id' => $_POST['course_unit_id'],
+                ':room_id' => $_POST['room_id'],
                 ':date' => $_POST['date'],
                 ':start_time' => $_POST['start_time'],
             ]);
 
             if($success_insersation) {
-                $stmt = $dbh->prepare("UPDATE room_allocation SET status = :status WHERE course_unit = :course_unit AND room = :room AND date = :date AND start_time = :start_time");
+                $stmt = $dbh->prepare("UPDATE room_allocation SET status = :status WHERE course_unit_id = :course_unit_id AND room_id = :room_id AND date = :date AND start_time = :start_time");
                 $stmt->execute([
                     ':status' => $status,
-                    ':course_unit' => $_POST['course_unit'],
-                    ':room' => $_POST['room'],
+                    ':course_unit_id' => $_POST['course_unit_id'],
+                    ':room_id' => $_POST['room_id'],
                     ':date' => $_POST['date'],
                     ':start_time' => $_POST['start_time'],
                 ]);
+
+                // create notification
+                $course_unit_id = $_POST['course_unit_id'];
+                $room_id = $_POST['room_id'];
+
+                // get notification data
+                $course = $dbh->query("SELECT name, code FROM course_unit WHERE id = $course_unit_id")->fetch(PDO::FETCH_OBJ);
+                $room = $dbh->query("SELECT room_name FROM room WHERE id = $room_id")->fetch(PDO::FETCH_OBJ);
+                $message = // In your assign_room section, update the message creation:
+                $message = "New Exam: {$course->code} in {$room->room_name} on " . date('M j', strtotime($_POST['date'])) . " at " . date('g:i a', strtotime($_POST['start_time']));
+                $users = $dbh->query("SELECT id FROM users WHERE role = 'student' OR role = 'staff'")->fetchAll(PDO::FETCH_OBJ);
+                $is_read = FALSE;
+
+                foreach($users as $user) {
+                    $stmt = $dbh->prepare("INSERT INTO notifications (user_id, message, is_read, related_url) VALUES (:user_id, :message, :is_read, :url)");
+                    $stmt->execute([
+                        ':user_id' => $user->id,
+                        ':message' => $message,
+                        ':is_read' => $is_read,
+                        'url' => 'view-allocations.php'
+                    ]);
+                }
             }
             
             header("Location: view-allocations.php?status=success&message=Assigned successfully!");
@@ -107,8 +129,8 @@ try {
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="course_unit" class="form-label">Select Exam</label>
-                                        <select class="form-select" id="course_unit" name="course_unit">
+                                        <label for="course_unit_id" class="form-label">Select Exam</label>
+                                        <select class="form-select" id="course_unit_id" name="course_unit_id">
                                             <option selected disabled>Choose an exam</option>
                                             <?php foreach($course_units as $unit): ?>
                                                 <option value="<?=$unit->id; ?>"> <?= htmlspecialchars($unit->name);?> (<?= htmlspecialchars($unit->code);?>)</option>
@@ -116,8 +138,8 @@ try {
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="" class="form-label">Choose Room</label>
-                                        <select class="form-select" id="" name="room">
+                                        <label for="room_id" class="form-label">Choose Room</label>
+                                        <select class="form-select" id="room_id" name="room_id">
                                             <option value="" selected disabled>Select room</option>
                                             <?php foreach($rooms as $room): ?>
                                                 <option value="<?=$room->id; ?>"> <?= htmlspecialchars($room->room_name);?> </option>
@@ -199,7 +221,7 @@ try {
     </div>
 </main>
 
-<!-- Add Department Modal -->
+<!-- Add room Modal -->
 <div class="modal fade" id="addRoomModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -289,31 +311,6 @@ try {
                     <button type="submit" name="delete_room" class="btn btn-sm btn-danger deleteBtn">Delete</button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-<!-- Assignment Modal -->
-<div class="modal fade" id="assignmentModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Assign Student to Seat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Assigning to seat: <strong id="selectedSeatNumber">A1</strong></p>
-                <div class="mb-3">
-                    <label for="studentSelect" class="form-label">Select Student</label>
-                    <select class="form-select" id="studentSelect">
-                        <!-- Students will be populated here -->
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="confirmAssignment">Assign</button>
-            </div>
         </div>
     </div>
 </div>
