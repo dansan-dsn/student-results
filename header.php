@@ -96,7 +96,7 @@ try {
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
                             <li><h6 class="dropdown-header">Recent Notifications</h6></li>
                             <?php
-                            $notifications = $dbh->query("SELECT * FROM notifications WHERE user_id = $user_id ORDER BY created_at DESC LIMIT 5")->fetchAll(PDO::FETCH_OBJ);
+                            $notifications = $dbh->query("SELECT * FROM notifications WHERE user_id = $user_id ORDER BY created_at DESC LIMIT 3")->fetchAll(PDO::FETCH_OBJ);
                             
                             if (empty($notifications)): ?>
                                 <li><a class="dropdown-item" href="#">No notifications</a></li>

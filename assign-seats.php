@@ -58,7 +58,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = // In your assign_room section, update the message creation:
                 $message = "New Exam: {$course->code} in {$room->room_name} on " . date('M j', strtotime($_POST['date'])) . " at " . date('g:i a', strtotime($_POST['start_time']));
                 $users = $dbh->query("SELECT id FROM users WHERE role = 'student' OR role = 'staff'")->fetchAll(PDO::FETCH_OBJ);
-                $is_read = FALSE;
+                $is_read = 0;
 
                 foreach($users as $user) {
                     $stmt = $dbh->prepare("INSERT INTO notifications (user_id, message, is_read, related_url) VALUES (:user_id, :message, :is_read, :url)");
