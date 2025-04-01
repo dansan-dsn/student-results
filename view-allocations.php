@@ -79,78 +79,82 @@ try {
 ?>
 
 <main class="container">
-
     <div class="main-view">
         <div class="department-container">
-            <!-- Department Header with Add Button -->
-            <div class="department-header">
-                <h2 class="department-title">
+            <!-- Enhanced Department Header -->
+            <div class="department-header glassmorphism-header mb-4">
+                <h2 class="department-title glow-text">
                     <i class='bx bx-building-house'></i> Examination Room Allocations
                 </h2>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Search allocations...">
+                    </div>
+                </div>
             </div>
 
-             <!-- Department Table -->
-             <div class="table-responsive">
-                <table class="table table-dark table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">No.</th>
-                            <th scope="col">Examination</th>
-                            <th scope="col">Room</th>
-                            <th scope="col">Date and Time</th>
-                            <th scope="col">status</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($allocations) > 0): ?>
-                            <?php foreach ($allocations as $index => $allocation): ?>
-                            <tr>
-                                <th scope="row"><?= $index + 1 ?></th>
-                                <td><?= htmlspecialchars($allocation->course_name) ?> (<?= htmlspecialchars($allocation->course_code)?>)</td>
-                                <td><?= htmlspecialchars($allocation->room_name) ?></td>
-                                <td><?= htmlspecialchars($allocation->date) ?> <span style="color: red; font-weight: bold">[ <?= htmlspecialchars($allocation->start_time) ?> ]</span></td>
-                                <td>
-                                    <?php
-                                        $badgeClass = "";
-                                        switch($allocation->status) {
-                                            case 'complete':
-                                                $badgeClass = 'text-bg-success'; // Blue for accepted
-                                                break;
-                                            default:
-                                                $badgeClass = 'text-bg-primary'; // Grey for default
-                                                break;
-                                        }
-                                    ?>
-                                    <span class="badge <?= $badgeClass?> " style='font-size: 12px'><?= htmlspecialchars($allocation->status); ?></span></br>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary me-1 edit-allocation" 
-                                            data-id="<?= $allocation->id ?>" 
-                                            data-exam="<?= $allocation->course_unit_id ?>" 
-                                            data-room="<?= $allocation->room_id ?>"
-                                            data-date="<?= htmlspecialchars($allocation->date) ?>" 
-                                            data-start-time="<?= htmlspecialchars($allocation->start_time) ?>"
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#editAllocationModal">
-                                        <i class='bx bx-edit'></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger delete-allocation" 
-                                            data-id="<?= $allocation->id ?>" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#deleteAllocationModal">
-                                        <i class='bx bx-trash'></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="4" class="text-center">No Allocation found</td>
-                                </tr>
-                            <?php endif; ?>
-                    </tbody>
-                </table>
+            <!-- Modern Card-Style Table Replacement -->
+            <div class="allocation-cards">
+                <?php if (count($allocations) > 0): ?>
+                    <?php foreach ($allocations as $index => $allocation): ?>
+                    <div class="allocation-card <?= $allocation->status === 'complete' ? 'completed' : '' ?>">
+                        <div class="card-header">
+                            <span class="card-index"><?= $index + 1 ?></span>
+                            <h3 class="card-title">
+                                <?= htmlspecialchars($allocation->course_name) ?> 
+                                <span class="course-code">(<?= htmlspecialchars($allocation->course_code) ?>)</span>
+                            </h3>
+                            <span class="status-badge <?= $allocation->status === 'complete' ? 'completed' : 'pending' ?>">
+                                <?= htmlspecialchars(ucfirst($allocation->status)) ?>
+                            </span>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="card-detail">
+                                <i class='bx bx-map'></i>
+                                <span><?= htmlspecialchars($allocation->room_name) ?></span>
+                            </div>
+                            
+                            <div class="card-detail">
+                                <i class='bx bx-calendar'></i>
+                                <span><?= htmlspecialchars($allocation->date) ?></span>
+                            </div>
+                            
+                            <div class="card-detail time-slot">
+                                <i class='bx bx-time-five'></i>
+                                <span class="highlight-time"><?= htmlspecialchars($allocation->start_time) ?></span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-actions">
+                            <button class="btn-action edit-allocation" 
+                                    data-id="<?= $allocation->id ?>" 
+                                    data-exam="<?= $allocation->course_unit_id ?>" 
+                                    data-room="<?= $allocation->room_id ?>"
+                                    data-date="<?= htmlspecialchars($allocation->date) ?>" 
+                                    data-start-time="<?= htmlspecialchars($allocation->start_time) ?>"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editAllocationModal">
+                                <i class='bx bx-edit'></i>
+                                <span>Edit</span>
+                            </button>
+                            <button class="btn-action delete-allocation" 
+                                    data-id="<?= $allocation->id ?>" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteAllocationModal">
+                                <i class='bx bx-trash'></i>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="no-allocations">
+                        <i class='bx bx-folder-open'></i>
+                        <p>No allocations found</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
