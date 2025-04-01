@@ -105,7 +105,7 @@ try {
 <main class="container">
     <div class="main-view">
         <div class="department-container">
-        <div class="department-header">
+            <div class="department-header">
                 <h2 class="department-title">
                     <i class='bx bx-building-house'></i> Assign Rooms
                 </h2>

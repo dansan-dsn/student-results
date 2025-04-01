@@ -72,6 +72,8 @@ try {
     <link rel="stylesheet" href="assets/styles/profile.css">
     <link rel="stylesheet" href="assets/styles/departments.css" >
     <link rel="stylesheet" href="assets/styles/assign.css">
+    <link rel="stylesheet" href="assets/styles/complaints.css">
+    <link rel="stylesheet" href="assets/styles/allocations.css">
 </head>
 <body>
 <div id="app">
