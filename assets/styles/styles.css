@@ -81,7 +81,7 @@ body::-webkit-scrollbar{
 
 /* User button */
 .user-btn {
-    background-color: #3c4a6b;
+    background-color: #386e46;
     color: #fff;
     border: none;
     border-radius: 25px;
@@ -94,7 +94,7 @@ body::-webkit-scrollbar{
 }
 
 .user-btn:hover {
-    background-color: #4a5b7b;
+    background-color: #519262;
     transform: scale(1.05);
 }
 

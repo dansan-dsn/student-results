@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select2 Example</title>
+    
+    <!-- jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <style>
+        /* Optional: Make the select2 wider */
+        .select2-container {
+            width: 300px !important;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Searchable Select with Select2</h2>
+    
+    <select id="searchableSelect" class="js-example-basic-single">
+        <option value="">Select an option...</option>
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+        <option value="orange">Orange</option>
+        <option value="grape">Grape</option>
+        <option value="mango">Mango</option>
+        <option value="strawberry">Strawberry</option>
+        <option value="blueberry">Blueberry</option>
+        <option value="pineapple">Pineapple</option>
+        <option value="watermelon">Watermelon</option>
+        <option value="kiwi">Kiwi</option>
+        <option value="peach">Peach</option>
+        <option value="pear">Pear</option>
+    </select>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2
+            $('.js-example-basic-single').select2({
+                placeholder: "Search for a fruit...",
+                allowClear: true
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+:root {
+    --dark-bg: #1a1e29;
+    --dark-card: #1e232e;
+    --dark-accent: #1a2e28;
+    --text-primary: #e0e3e7;
+    --text-secondary: #a1a8b3;
+    --primary-color: #4CAF50; /* Green primary */
+    --primary-hover: #3d8b40;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --success: #4CAF50;
+    --warning: #FFC107;
+    --danger: #F44336;
+}
+
+.marks-entry-container {
+    background: var(--dark-card);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.entry-header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+}
+
+.header-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-control,
+.form-select {
+    width: 100%;
+    padding: 0.75rem;
+    background: #ffffff0d;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(26, 77, 55, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* Special Input Types */
+.form-control .input[type="date"]::-webkit-calendar-picker-indicator,
+.form-control .input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.8;
+}
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.btn-reset {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-reset:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-submit {
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    color: #fff;
+}
+
+.btn-submit:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-import {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-import:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.recent-entries {
+    margin-top: 2rem;
+}
+
+.recent-entries h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.entries-table {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.7fr 0.7fr 0.7fr;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-body {
+    background: var(--dark-card);
+}
+
+.no-entries {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.no-entries i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.no-entries p {
+    margin: 0;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+}
+
+/* Change placeholder text color for all inputs */
+::placeholder {
+    color: #6b7280 !important; /* Medium gray for placeholders */
+    opacity: 1 !important; /* Ensure full visibility */
+}
+
+/* Specific styling for different input types */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+    color: #6b7280 !important;
+}
+
+/* Focus state placeholder (lighter when focused) */
+input:focus::placeholder,
+textarea:focus::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Dark Theme Select Dropdowns, Date & Time Pickers */
+select.form-control,
+select.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5rem;
+    padding-right: 2.5rem;
+}
+
+/* Date Picker Dark Theme */
+input[type="date"] {
+    position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234CAF50' viewBox='0 0 24 24'%3e%3cpath d='M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z'/%3e%3c/svg%3e");
+    background-position: 95% center;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: var(--text-primary);
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    background: transparent;
+}
+
+/* Time Picker Dark Theme */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234CAF50' viewBox='0 0 24 24'%3e%3cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3e%3c/svg%3e");
+    background-position: 95% center;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+input[type="time"]::-webkit-datetime-edit {
+    color: var(--text-primary);
+}
+
+/* Dropdown Options Styling */
+select option {
+    background-color: var(--dark-card);
+    color: var(--text-primary);
+}
+
+select optgroup {
+    background-color: var(--dark-bg);
+    color: var(--text-secondary);
+    font-style: normal;
+}
+
+/* For Firefox */
+select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 var(--text-primary);
+}
+
+/* For IE10+ */
+select::-ms-expand {
+    display: none;
+}
+
+/* Fix for Safari date/time picker modal */
+@media not all and (min-resolution:.001dpcm) { 
+    @supports (-webkit-appearance:none) {
+        input[type="date"],
+        input[type="time"] {
+            color-scheme: dark;
+        }
+    }
+}
+
+/* Force dark color scheme for pickers */
+@media (prefers-color-scheme: dark) {
+    input[type="date"],
+    input[type="time"],
+    select {
+        color-scheme: dark;
+    }
+}
+
+/* Select2 Dark Theme Matching Input Fields */
+.select2-container--default .select2-selection--single {
+    background-color: #ffffff0d; /* Matches your input field background */
+    border: 1px solid var(--border-color); /* Same border as inputs */
+    border-radius: 6px;
+    height: auto;
+    padding: 0.75rem; /* Same padding as inputs */
+    transition: all 0.2s ease; /* Matching transition */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--text-primary); /* Matching text color */
+    line-height: 1.5;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #6b7280; /* Matching placeholder color */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    right: 12px;
+    width: 20px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: var(--primary-color) transparent transparent transparent;
+    border-width: 6px 6px 0 6px;
+    margin-left: -6px;
+    margin-top: -3px;
+}
+
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+    border-color: transparent transparent var(--primary-color) transparent;
+    border-width: 0 6px 6px 6px;
+}
+
+.select2-container--default .select2-dropdown {
+    background-color: var(--dark-card); /* Matching card background */
+    border: 1px solid var(--border-color);
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.select2-container--default .select2-results__option {
+    color: var(--text-primary);
+    padding: 0.75rem 1rem; /* Matching input padding */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.select2-container--default .select2-results__option:last-child {
+    border-bottom: none;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: rgba(76, 175, 80, 0.2); /* Primary color with opacity */
+    color: var(--text-primary);
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: rgba(76, 175, 80, 0.1); /* Lighter selection */
+    color: var(--text-primary);
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    background-color: #ffffff0d; /* Matching input background */
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+.select2-container--focus .select2-selection--single {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2); /* Matching focus state */
+    background: rgba(255, 255, 255, 0.08); /* Matching input focus */
+}
+
+/* Loading indicator */
+.select2-container--default .select2-results__option--loading {
+    color: var(--text-secondary);
+    background-color: transparent;
+}
+
+/* Search icon in dropdown */
+.select2-container--default .select2-search--dropdown:before {
+    content: '\f002';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 15px;
+    top: 12px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    padding-left: 35px;
+}
+
+/* No results found */
+.select2-container--default .select2-results__message {
+    color: var(--text-secondary);
+    padding: 0.75rem 1rem;
+}

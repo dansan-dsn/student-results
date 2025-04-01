@@ -1,18 +1,33 @@
-/* Modern Dark Theme Styles */
+/* Modern Dark Green Theme */
 :root {
-    --dark-primary: #1a1a2e;
-    --dark-secondary: #16213e;
-    --dark-accent: #0f3460;
-    --neon-blue: #00b4d8;
-    --neon-pink: #ff2d75;
+    --dark-primary: #1a1e1e;
+    --dark-secondary: #1e2323;
+    --dark-accent: #1a2e28;
+    --neon-green: #4CAF50;
+    --neon-lime: #A5D6A7;
     --text-primary: #e2e2e2;
     --text-secondary: #b8b8b8;
-    --success: #4cc9f0;
-    --warning: #f8961e;
-    --danger: #f94144;
-    --glass-bg: rgba(30, 30, 46, 0.7);
+    --success: #4CAF50;
+    --warning: #FFC107;
+    --danger: #F44336;
+    --glass-bg: rgba(30, 46, 46, 0.7);
 }
 
+/* Form Placeholders */
+::placeholder {
+    color: #6b7280 !important;
+    opacity: 1 !important;
+}
+
+.form-control::placeholder {
+    color: rgba(160, 174, 192, 0.7) !important;
+}
+
+.form-control:focus::placeholder {
+    color: rgba(160, 174, 192, 0.5) !important;
+}
+
+/* Card Layout */
 .allocation-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -38,21 +53,21 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background: var(--neon-blue);
+    background: var(--neon-green);
     transition: all 0.3s ease;
 }
 
 .allocation-card:hover {
     transform: translateY(-5px);
-    /* box-shadow: 0 12px 40px rgba(0, 180, 216, 0.15); */
-    border-color: rgba(0, 180, 216, 0.3);
+    border-color: rgba(76, 175, 80, 0.3);
 }
 
 .allocation-card:hover::before {
     width: 6px;
-    background: var(--neon-pink);
+    background: var(--neon-lime);
 }
 
+/* Card Content */
 .card-header {
     display: flex;
     align-items: center;
@@ -62,7 +77,7 @@
 
 .card-index {
     background: var(--dark-accent);
-    color: var(--neon-blue);
+    color: var(--neon-green);
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -82,10 +97,11 @@
 }
 
 .course-code {
-    color: var(--neon-blue);
+    color: var(--neon-lime);
     font-size: 0.9rem;
 }
 
+/* Status Badges */
 .status-badge {
     padding: 0.35rem 0.75rem;
     border-radius: 20px;
@@ -96,17 +112,18 @@
 }
 
 .status-badge.completed {
-    background: rgba(76, 201, 240, 0.15);
+    background: rgba(76, 175, 80, 0.15);
     color: var(--success);
-    border: 1px solid rgba(76, 201, 240, 0.3);
+    border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 .status-badge.pending {
-    background: rgba(248, 150, 30, 0.15);
+    background: rgba(255, 193, 7, 0.15);
     color: var(--warning);
-    border: 1px solid rgba(248, 150, 30, 0.3);
+    border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
+/* Card Body */
 .card-body {
     display: flex;
     flex-direction: column;
@@ -124,7 +141,7 @@
 .card-detail i {
     margin-right: 10px;
     font-size: 1.1rem;
-    color: var(--neon-blue);
+    color: var(--neon-lime);
 }
 
 .time-slot {
@@ -132,14 +149,15 @@
 }
 
 .highlight-time {
-    color: var(--neon-pink);
+    color: var(--neon-green);
     font-weight: 600;
-    background: rgba(255, 45, 117, 0.1);
+    background: rgba(76, 175, 80, 0.1);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     margin-left: 5px;
 }
 
+/* Action Buttons */
 .card-actions {
     display: flex;
     gap: 0.75rem;
@@ -167,15 +185,15 @@
 }
 
 .btn-action.edit-allocation {
-    background: rgba(0, 180, 216, 0.1);
-    color: var(--neon-blue);
-    border: 1px solid rgba(0, 180, 216, 0.3);
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--neon-lime);
+    border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 .btn-action.delete-allocation {
-    background: rgba(249, 65, 68, 0.1);
+    background: rgba(244, 67, 54, 0.1);
     color: var(--danger);
-    border: 1px solid rgba(249, 65, 68, 0.3);
+    border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
 .btn-action:hover {
@@ -183,35 +201,16 @@
 }
 
 .btn-action.edit-allocation:hover {
-    background: rgba(0, 180, 216, 0.2);
-    box-shadow: 0 4px 12px rgba(0, 180, 216, 0.1);
+    background: rgba(76, 175, 80, 0.2);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.1);
 }
 
 .btn-action.delete-allocation:hover {
-    background: rgba(249, 65, 68, 0.2);
-    box-shadow: 0 4px 12px rgba(249, 65, 68, 0.1);
+    background: rgba(244, 67, 54, 0.2);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.1);
 }
 
-.no-allocations {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-secondary);
-}
-
-.no-allocations i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: var(--neon-blue);
-    opacity: 0.5;
-}
-
-.no-allocations p {
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-/* Glassmorphism Header */
+/* Header Styles */
 .glassmorphism-header {
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
@@ -227,7 +226,7 @@
 }
 
 .glow-text {
-    text-shadow: 0 0 10px rgba(0, 180, 216, 0.3);
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
 
 .search-box {
@@ -247,8 +246,8 @@
 }
 
 .search-box input:focus {
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+    border-color: var(--neon-green);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 .search-box i {
@@ -256,5 +255,43 @@
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--neon-blue);
+    color: var(--neon-lime);
+}
+
+/* Empty State */
+.no-allocations {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+.no-allocations i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--neon-green);
+    opacity: 0.5;
+}
+
+.no-allocations p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neon-green);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-lime);
 }

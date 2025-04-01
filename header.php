@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include('config/db.php');
 include('notification_functions.php');
 
@@ -66,6 +67,9 @@ try {
     <!-- bootstrap links --> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+     <!-- Select2 CSS (if using Select2 version) -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+
     <!-- custom css links -->
     <link rel="stylesheet" href="assets/styles/styles.css">
     <link rel="stylesheet" href="assets/styles/dashboard.css" >
@@ -74,6 +78,7 @@ try {
     <link rel="stylesheet" href="assets/styles/assign.css">
     <link rel="stylesheet" href="assets/styles/complaints.css">
     <link rel="stylesheet" href="assets/styles/allocations.css">
+    <link rel="stylesheet" href="assets/styles/results.css">
 </head>
 <body>
 <div id="app">
@@ -198,17 +203,17 @@ try {
         <!-- Results Section -->
         <div class="menu-section">
             <ul>
-                <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['view-results.php', 'semester-results.php'])) ? 'active' : ''; ?>">
+                <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['new-results.php', 'semester-results.php'])) ? 'active' : ''; ?>">
                     <a href="javascript:void(0);" onclick="toggleSubmenu('results')">
                         <i class='bx bxs-report'></i> Results
                         <i class='bx bx-chevron-down' id="results-chevron"></i>
                     </a>
-                    <ul id="results-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['view-results.php', 'semester-results.php'])) ? 'block' : 'none'; ?>;">
-                        <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'view-results.php') ? 'active' : ''; ?>">
-                            <a href="view-results.php">View Results</a>
+                    <ul id="results-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['new-results.php', 'semester-results.php'])) ? 'block' : 'none'; ?>;">
+                        <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'new-results.php') ? 'active' : ''; ?>">
+                            <a href="new-results.php">New Results</a>
                         </li>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'semester-results.php') ? 'active' : ''; ?>">
-                            <a href="semester-results.php">Semester Summary</a>
+                            <a href="semester-results.php">Semester Results</a>
                         </li>
                     </ul>
                 </li>

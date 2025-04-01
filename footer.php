@@ -19,6 +19,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
+
+    <!-- jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- aside menu and submenu -->
     <script>
         function toggleSubmenu(id) {
@@ -41,7 +48,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const currentPage = basename(window.location.pathname);
             const parentMenus = {
-                'view-results.php': 'results',
+                'new-results.php': 'results',
                 'semester-results.php': 'results',
                 'course.php': 'course',
                 'course_units.php': 'course',
