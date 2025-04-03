@@ -106,7 +106,7 @@ try{
                 </div>
 
                 <!-- Recent Entries Preview -->
-                <div class="recent-entries">
+                <!-- <div class="recent-entries">
                     <h4>Recent Entries</h4>
                     <div class="entries-table">
                         <div class="table-header">
@@ -116,7 +116,6 @@ try{
                             <span>Exam</span>
                             <span>Total</span>
                         </div>
-                        <!-- This would be populated via AJAX or PHP -->
                         <div class="table-body">
                             <div class="no-entries">
                                 <i class='bx bx-info-circle'></i>
@@ -124,7 +123,7 @@ try{
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

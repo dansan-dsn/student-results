@@ -2,7 +2,7 @@
 include('header.php');
 
 // Authentication check
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
+if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] !== 'student')) {
     header("Location: login.php");
     exit();
 }
@@ -15,11 +15,14 @@ $stmt = $dbh->prepare("
         r.*,
         cu.name AS course_unit_name,
         cu.credit_units,
+        cu.code AS unit_code,
         st.name AS student_name,
         st.reg_no,
         st.course AS course_id,
         co.course_name,
-        st.academic_year
+        st.academic_year,
+        st.year_of_study,
+        st.semester
     FROM results r
     LEFT JOIN course_unit cu ON r.code = cu.id
     LEFT JOIN students st ON r.studentId = st.studentId
@@ -39,24 +42,24 @@ foreach ($results as $result) {
     $result->total_score = $result->course_work + $result->exam;
     $result->grade = calculateGrade($result->total_score);
     $result->grade_point = calculateGradePoint($result->grade);
-    $result->quality_point = $result->credit_hours * $result->grade_point;
+    $result->quality_point = $result->credit_units * $result->grade_point;
     
-    $total_credit_hours += $result->credit_hours;
+    $total_credit_hours += $result->credit_units;
     $total_grade_points += $result->quality_point;
 }
 
 $gpa = $total_credit_hours > 0 ? $total_grade_points / $total_credit_hours : 0;
 ?>
 
-<main class="container dark-theme">
+<main class="container">
     <div class="main-view">
         <div class="result-slip-container">
             <!-- Printable Result Slip -->
             <div class="result-slip">
                 <!-- Header with Institution Info -->
                 <div class="institution-header text-center mb-4">
-                    <img src="/path/to/logo-light.png" alt="Institution Logo" class="institution-logo" style="height: 80px;">
-                    <h1 class="institution-name">UNIVERSITY OF EXAMPLE</h1>
+                    <!-- <img src="/path/to/logo-light.png" alt="Institution Logo" class="institution-logo" style="height: 80px;"> -->
+                    <h1 class="institution-name">UNIVERSITY OF MINE</h1>
                     <p class="institution-address">123 Education Street, Knowledge City</p>
                     <h2 class="document-title">OFFICIAL RESULT SLIP</h2>
                 </div>
@@ -70,17 +73,22 @@ $gpa = $total_credit_hours > 0 ? $total_grade_points / $total_credit_hours : 0;
                         </tr>
                         <tr>
                             <td><strong>Program:</strong> <span class="text-secondary"><?= htmlspecialchars($results[0]->course_name ?? '') ?></span></td>
+                                
                             <td><strong>Academic Year:</strong> <span class="text-secondary"><?= htmlspecialchars($results[0]->academic_year ?? '') ?></span></td>
+                        </tr>
+                        <tr>
+                        <td><strong>Year of Study:</strong> <span class="text-secondary"><?= htmlspecialchars($results[0]->year_of_study ?? '') ?></span></td>
+                        <td><strong>Semester:</strong> <span class="text-secondary"><?= htmlspecialchars($results[0]->semester ?? '') ?></span></td>
                         </tr>
                     </table>
                 </div>
         
                 <!-- Results Table -->
                 <div class="results-table mb-4">
-                    <table class="table">
+                    <table>
                         <thead>
                             <tr class="table-header">
-                                <th>Code</th>
+                                <th >Code</th>
                                 <th>Course Unit</th>
                                 <th>Credit Hours</th>
                                 <th>Course Work</th>
@@ -93,14 +101,26 @@ $gpa = $total_credit_hours > 0 ? $total_grade_points / $total_credit_hours : 0;
                         <tbody>
                             <?php foreach ($results as $result): ?>
                             <tr>
-                                <td><?= htmlspecialchars($result->code) ?></td>
-                                <td><?= htmlspecialchars($result->course_unit_name) ?></td>
-                                <td class="text-center"><?= htmlspecialchars($result->credit_units) ?></td>
-                                <td class="text-center"><?= htmlspecialchars($result->course_work) ?></td>
-                                <td class="text-center"><?= htmlspecialchars($result->exam) ?></td>
-                                <td class="text-center highlight-text"><?= htmlspecialchars($result->total_score) ?></td>
-                                <td class="text-center grade-<?= strtolower($result->grade) ?>"><?= htmlspecialchars($result->grade) ?></td>
-                                <td class="text-center"><?= number_format($result->grade_point, 1) ?></td>
+                                <td style="padding: 10px 15px; font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;"><?= htmlspecialchars($result->unit_code) ?></td>
+                                <td style="padding: 10px 15px;"><?= htmlspecialchars($result->course_unit_name) ?></td>
+                                <td style="padding: 10px 15px; text-align: center;"><?= htmlspecialchars($result->credit_units) ?></td>
+                                <td style="padding: 10px 15px; text-align: center;"><?= htmlspecialchars($result->course_work) ?></td>
+                                <td style="padding: 10px 15px; text-align: center;"><?= htmlspecialchars($result->exam) ?></td>
+                                <td style="padding: 10px 15px; text-align: center; font-weight: bold;"><?= htmlspecialchars($result->total_score) ?></td>
+                                <td style="padding: 10px 15px; text-align: center; font-weight: bold; 
+                                    <?php 
+                                    switch(strtolower($result->grade)) {
+                                        case 'a': echo 'color: #2ecc71'; break;
+                                        case 'b': echo 'color: #3498db'; break;
+                                        case 'c': echo 'color: #f39c12'; break;
+                                        case 'd': echo 'color: #e67e22'; break;
+                                        case 'f': echo 'color: #e74c3c'; break;
+                                        default: echo 'color: white';
+                                    }
+                                    ?>">
+                                    <?= htmlspecialchars($result->grade) ?>
+                                </td>
+                                <td style="padding: 10px 15px; text-align: center;"><?= number_format($result->grade_point, 1) ?></td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -143,9 +163,9 @@ $gpa = $total_credit_hours > 0 ? $total_grade_points / $total_credit_hours : 0;
         
             <!-- Print Button -->
             <div class="text-center mt-3">
-                <button onclick="window.print()" class="btn print-button">
+                <!-- <button onclick="window.print()" class="btn print-button">
                     <i class="fas fa-print"></i> Print Result Slip
-                </button>
+                </button> -->
             </div>
         </div>
     </div>

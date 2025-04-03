@@ -79,6 +79,9 @@ try {
     <link rel="stylesheet" href="assets/styles/complaints.css">
     <link rel="stylesheet" href="assets/styles/allocations.css">
     <link rel="stylesheet" href="assets/styles/results.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 </head>
 <body>
 <div id="app">
@@ -203,7 +206,7 @@ try {
         <!-- Results Section -->
         <div class="menu-section">
             <ul>
-                <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['new-results.php', 'semester-results.php'])) ? 'active' : ''; ?>">
+                <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['new-results.php', 'student-results.php', 'semester-results.php'])) ? 'active' : ''; ?>">
                     <a href="javascript:void(0);" onclick="toggleSubmenu('results')">
                         <i class='bx bxs-report'></i> Results
                         <i class='bx bx-chevron-down' id="results-chevron"></i>
@@ -213,10 +216,14 @@ try {
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'new-results.php') ? 'active' : ''; ?>">
                             <a href="new-results.php">New Results</a>
                         </li>
-                        <?php endif;?>
+                        <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'student-results.php') ? 'active' : ''; ?>">
+                            <a href="student-results.php">Student Results</a>
+                        </li>
+                        <?php elseif($user_role === 'student'):?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'semester-results.php') ? 'active' : ''; ?>">
                             <a href="semester-results.php">Semester Results</a>
                         </li>
+                        <?php endif;?>
                     </ul>
                 </li>
             </ul>

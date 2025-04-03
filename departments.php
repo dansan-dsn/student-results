@@ -2,6 +2,12 @@
 ob_start();
 include('header.php');
 
+// Authentication check
+if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] !== 'staff')) {
+    header("Location: login.php");
+    exit();
+}
+
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -83,7 +89,7 @@ try {
                 <table class="table table-dark table-hover table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">No.</th>
+                            <th scope="col">#</th>
                             <th scope="col">Department Name</th>
                             <th scope="col">Department Head</th>
                             <th scope="col">Action</th>

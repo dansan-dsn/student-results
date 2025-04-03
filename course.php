@@ -1,6 +1,11 @@
 <?php
 ob_start();
 include('header.php');
+// Authentication check
+if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] !== 'staff')) {
+    header("Location: login.php");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -61,7 +66,7 @@ $courses = $dbh->query("SELECT * FROM course ORDER BY course_name")->fetchAll(PD
                 <table class="table table-dark table-hover table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">No.</th>
+                            <th scope="col">#</th>
                             <th scope="col">Course Code</th>
                             <th scope="col">Course Name</th>
                             <th scope="col">Action</th>

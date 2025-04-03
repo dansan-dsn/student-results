@@ -6,6 +6,13 @@
         document.getElementById('year').innerHTML = new Date().getFullYear()
     </script>
 
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+
     <!-- bootstrap css -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- vue link -->
@@ -50,6 +57,7 @@
             const parentMenus = {
                 'new-results.php': 'results',
                 'semester-results.php': 'results',
+                'student-results.php': 'results',
                 'course.php': 'course',
                 'course_units.php': 'course',
                 'generate-reports.php': 'reports',
@@ -173,6 +181,8 @@
             }
         });
     </script>
+
+    <!-- tables  -->
 
 </body>
 </html>
