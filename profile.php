@@ -318,7 +318,7 @@ if(isset($_POST['change_password'])){
                         <div class="col-md-6">
                             <label for="studentNo" class="form-label">Student Number</label>
                             <input type="text" class="form-control" id="studentNo" name="student_no" 
-                                   value="<?= htmlspecialchars($role_data->student_no ?? '') ?>" readonly>
+                                   value="<?= htmlspecialchars($role_data->student_no ?? '') ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="regNo" class="form-label">Registration Number</label>

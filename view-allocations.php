@@ -1,6 +1,7 @@
 <?php
 ob_start();
 include('header.php');
+$user_role = $_SESSION['user_role'];
 
 // Mark all related notifications as read when landing on this page
 if (isset($_GET['mark_all_read'])) {
@@ -126,7 +127,7 @@ try {
                                 <span class="highlight-time"><?= htmlspecialchars($allocation->start_time) ?></span>
                             </div>
                         </div>
-                        
+                        <?php if($user_role === 'staff'):?>
                         <div class="card-actions">
                             <button class="btn-action edit-allocation" 
                                     data-id="<?= $allocation->id ?>" 
@@ -147,6 +148,7 @@ try {
                                 <span>Delete</span>
                             </button>
                         </div>
+                        <?php endif;?>
                     </div>
                     <?php endforeach; ?>
                 <?php else: ?>

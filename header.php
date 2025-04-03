@@ -209,9 +209,11 @@ try {
                         <i class='bx bx-chevron-down' id="results-chevron"></i>
                     </a>
                     <ul id="results-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['new-results.php', 'semester-results.php'])) ? 'block' : 'none'; ?>;">
+                        <?php if($user_role === 'staff'):?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'new-results.php') ? 'active' : ''; ?>">
                             <a href="new-results.php">New Results</a>
                         </li>
+                        <?php endif;?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'semester-results.php') ? 'active' : ''; ?>">
                             <a href="semester-results.php">Semester Results</a>
                         </li>
@@ -221,6 +223,7 @@ try {
         </div>
 
         <!-- Course Section -->
+        <?php if($user_role === 'staff'):?>
         <div class="menu-section">
             <ul>
                 <li class="<?php echo (in_array(basename($_SERVER['PHP_SELF']), ['course.php', 'course_units.php'])) ? 'active' : ''; ?>">
@@ -239,6 +242,7 @@ try {
                 </li>
             </ul>
         </div>
+        <?php endif; ?>
 
         <!-- Reports Section -->
         <div class="menu-section">
@@ -269,12 +273,15 @@ try {
                         <i class='bx bx-chevron-down' id="complaints-chevron"></i>
                     </a>
                     <ul id="complaints-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['submit-complaint.php', 'complaint-status.php'])) ? 'block' : 'none'; ?>;">
+                        <?php if($user_role === 'student'):?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'submit-complaint.php') ? 'active' : ''; ?>">
                             <a href="submit-complaint.php">Submit Complaint</a>
                         </li>
+                        <?php else: ?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'complaint-status.php') ? 'active' : ''; ?>">
                             <a href="complaint-status.php">Check Status</a>
                         </li>
+                        <?php endif;?>
                     </ul>
                 </li>
             </ul>
@@ -289,14 +296,16 @@ try {
                         <i class='bx bx-chevron-down' id="room-management-chevron"></i>
                     </a>
                     <ul id="room-management-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['assign-seats.php', 'view-allocations.php', 'departments.php'])) ? 'block' : 'none'; ?>;">
+                        <?php if ($user_role === 'staff'):?>
+                        <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'departments.php') ? 'active' : ''; ?>">
+                            <a href="departments.php">Departments</a>
+                        </li>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'assign-seats.php') ? 'active' : ''; ?>">
                             <a href="assign-seats.php">Assign Rooms</a>
                         </li>
+                        <?php endif; ?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'view-allocations.php') ? 'active' : ''; ?>">
                             <a href="view-allocations.php">View Allocations</a>
-                        </li>
-                        <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'departments.php') ? 'active' : ''; ?>">
-                            <a href="departments.php">Departments</a>
                         </li>
                     </ul>
                 </li>

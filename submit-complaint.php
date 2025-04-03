@@ -75,7 +75,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group mb-3">
                         <label for="lecturer" style="color: #495057">Lecturer:</label>
                         <select id="lecturer" name="lecturer" required class="form-control">
-                            <option value="" selected disabled>-- Select --</option>
+                            <option value="" selected disabled>To whom</option>
                             <?php foreach($staffs as $staff):?>
                                 <option value="<?= htmlspecialchars($staff->staffId) ?>" > <?= htmlspecialchars($staff->name); ?></option>
                             <?php endforeach; ?>
@@ -85,7 +85,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group mb-3">
                         <label for="reason" style="color: #495057">Reason for Complaint:</label>
                         <select id="reason" name="reason" required class="form-control">
-                            <option value="" selected disabled>-- Select --</option>
+                            <option value="" selected disabled>Choose reason</option>
                             <option value="Faulty Marks">Faulty Marks</option>
                             <option value="Missing Marks">Missing Marks</option>
                         </select>

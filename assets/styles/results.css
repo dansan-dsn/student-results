@@ -141,7 +141,6 @@
 }
 
 .table-header {
-    display: grid;
     grid-template-columns: 1fr 1fr 0.7fr 0.7fr 0.7fr;
     background: rgba(0, 0, 0, 0.2);
     padding: 0.75rem 1rem;
@@ -406,4 +405,130 @@ select::-ms-expand {
 .select2-container--default .select2-results__message {
     color: var(--text-secondary);
     padding: 0.75rem 1rem;
+}
+
+ /* Dark Theme Styling */
+ .dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+    padding: 20px 0;
+}
+
+.result-slip {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border: 1px solid #333;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    max-width: 1000px;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+.institution-header {
+    border-bottom: 2px solid #4a6fa5;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.institution-name {
+    color: #4a6fa5;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    letter-spacing: 1px;
+}
+
+.institution-address {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.document-title {
+    color: #4a6fa5;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.info-table {
+    width: 100%;
+    margin-bottom: 20px;
+    color: #e0e0e0;
+}
+
+.info-table td {
+    padding: 8px 15px;
+    width: 50%;
+    border-bottom: 1px solid #333;
+}
+
+.highlight-text {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+
+/* Grade-specific colors */
+.grade-a { color: #2ecc71; font-weight: bold; }
+.grade-b { color: #3498db; font-weight: bold; }
+.grade-c { color: #f39c12; font-weight: bold; }
+.grade-d { color: #e67e22; font-weight: bold; }
+.grade-f { color: #e74c3c; font-weight: bold; }
+
+.summary-table {
+    width: 100%;
+    color: #e0e0e0;
+}
+
+.summary-table td {
+    padding: 8px 10px;
+    border: none;
+}
+
+.signature-area {
+    margin-top: 30px;
+    color: #aaa;
+}
+
+.signature-line {
+    color: #4a6fa5;
+}
+
+.footer-note {
+    color: #777;
+    font-size: 0.8rem;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+}
+
+.print-button {
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.print-button:hover {
+    background-color: #3a5a8f;
+    transform: translateY(-2px);
+}
+
+@media print {
+    .print-button {
+        display: none;
+    }
+    
+    body {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+    }
+    
+    .result-slip {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
 }
