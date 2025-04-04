@@ -24,26 +24,27 @@ $query = "SELECT
     s.studentId,
     s.name as student_name,
     s.reg_no,
-    s.academic_year,
-    s.semester,
-    s.year_of_study,
+    en.academic_year,
+    en.semester,
+    en.year_of_study,
     c.id as course_id,
     c.course_name,
     c.course_code
 FROM results r
 LEFT JOIN course_unit cu ON r.code = cu.id
 LEFT JOIN students s ON r.studentId = s.studentId
+LEFT JOIN enrollments en ON s.studentId = en.studentId
 LEFT JOIN course c ON s.course = c.id
 WHERE 1=1";  // This WHERE 1=1 allows easy addition of filters
 
 // Add filters dynamically only if they have values
 $params = [];
 if (!empty($academic_year)) {
-    $query .= " AND s.academic_year = :academic_year";
+    $query .= " AND en.academic_year = :academic_year";
     $params[':academic_year'] = $academic_year;
 }
 if (!empty($semester)) {
-    $query .= " AND s.semester = :semester";
+    $query .= " AND en.semester = :semester";
     $params[':semester'] = $semester;
 }
 if (!empty($course_id)) {
@@ -77,7 +78,7 @@ try {
 }
 
 // Get filter options for dropdowns
-$years = $dbh->query("SELECT DISTINCT academic_year FROM students ORDER BY academic_year DESC")->fetchAll();
+$years = $dbh->query("SELECT DISTINCT academic_year FROM enrollments ORDER BY academic_year DESC")->fetchAll();
 $courses = $dbh->query("SELECT id, course_name FROM course")->fetchAll();
 
 function calculateGrade($total) {
@@ -141,8 +142,8 @@ function calculateGrade($total) {
                                value="<?= htmlspecialchars($search) ?>">
                     </div>
                     <div class="col-md-1 d-flex flex-column align-items-start justify-content-end">
-                        <button type="submit" class="btn btn-sm btn-primary mb-2">Filter</button>
-                        <a href="student-results.php" class="btn btn-sm btn-secondary">Reset</a>
+                        <button type="submit" class="btn btn-sm btn-primary mb-2"><i class='bx bx-filter' style='color:#ffffff; font-size: 1.1rem;' ></i> Filter</button>
+                        <a href="student-results.php" class="btn btn-sm btn-secondary"><i class='bx bx-reset' style='color:#ffffff' ></i> Reset</a>
                     </div>
                 </div>
             </form>
@@ -224,8 +225,8 @@ function calculateGrade($total) {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" name="edit_result" class="btn btn-primary">Save Changes</button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" name="edit_result" class="btn btn-sm btn-primary">Save</button>
                             </div>
                         </form>
                     </div>
@@ -236,12 +237,14 @@ function calculateGrade($total) {
 </main>
 
 <script>
-// Handle edit modal population
-document.querySelectorAll('.edit-result').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.getElementById('editResultId').value = this.dataset.id;
-        document.getElementById('editCourseWork').value = this.dataset.cw;
-        document.getElementById('editExam').value = this.dataset.exam;
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle edit modal population
+    document.querySelectorAll('.edit-result').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('editResultId').value = this.dataset.id;
+            document.getElementById('editCourseWork').value = this.dataset.cw;
+            document.getElementById('editExam').value = this.dataset.exam;
+        });
     });
 });
 </script>

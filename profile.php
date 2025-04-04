@@ -88,6 +88,39 @@ try {
     exit();
 }
 
+// enroll
+if (isset($_POST['enroll'])) {
+    $academic_year = $_POST['academic_year'];
+    $semester = $_POST['semester'];
+    $year_of_study = $_POST['year_of_study'];
+
+    try {
+        // enroll if the student has not enrolled for the acadmeic year, semester and year of study
+        $stmt = $dbh->prepare("SELECT * FROM enrollments WHERE studentId = ? AND academic_year = ? AND semester = ? AND year_of_study = ?");
+        $stmt->execute([$user_id, $academic_year, $semester, $year_of_study]);
+        $enrollment = $stmt->fetch(PDO::FETCH_OBJ);
+        if ($enrollment) {
+            $error_msg = "Already enrolled for this academic year, semester and year of study.";
+            header("Location: profile.php?status=error&message=$error_msg");
+            exit();
+        }
+
+        // Insert enrollment record
+        $stmt = $dbh->prepare("INSERT INTO enrollments (studentId, academic_year, semester, year_of_study) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$user_id, $academic_year, $semester, $year_of_study]);
+        $success_msg = "Successfully enrolled!";
+        header("Location: profile.php?status=success&message=$success_msg");
+        exit();
+        
+    } catch (PDOException $e) {
+        error_log("Database error (enrollment): " . $e->getMessage());
+        // $error_msg = "Error enrolling in course";
+        $error_msg = $e->getMessage();
+        header("Location: profile.php?status=error&message=$error_msg");
+        exit();
+    }
+}
+
 // Handle Profile Update
 if (isset($_POST['update_profile'])) {
     try{
@@ -258,6 +291,11 @@ if(isset($_POST['change_password'])){
                 <button class="btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                     <i class='bx bx-edit'></i> Edit Profile
                 </button>
+                <?php if($role == "student"):?>
+                <button class="btn-sm btn-change-password bg-secondary text-light" data-bs-toggle="modal" data-bs-target="#enrollModal">
+                    <i class='bx bx-repost'></i> Enroll
+                </button>
+                <?php endif;?>
                 <button class="btn-sm btn-change-password" data-bs-toggle="offcanvas" data-bs-target="#changePasswordOffcanvas">
                     <i class='bx bx-lock-alt'></i> Change Password
                 </button>
@@ -370,6 +408,53 @@ if(isset($_POST['change_password'])){
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-sm btn-primary" name="update_profile">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- enroll modal -->
+<div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="editEnrollModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEnrollModalLabel">Enroll Now</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="">
+                    <input type="hidden" name="user_id" value="<?= $user_id ?>">
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="academic_year" class="form-label">Academic Year</label>
+                            <input type="text" class="form-control" id="academic_year" name="academic_year" placeholder="2024 or 2024/2025" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="semester" class="form-label">Semester</label>
+                            <select name="semester" class="form-select" id="semester" required>
+                                <option value="" selected disabled>Select Semester</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="year_of_study" class="form-label">Year of Study</label>
+                        <select name="year_of_study" class="form-select" id="year_of_study" required>
+                            <option value="" selected disabled>Select Year of Study</option>
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3">Year 3</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-sm btn-primary" name="enroll">Enroll</button>
                     </div>
                 </form>
             </div>

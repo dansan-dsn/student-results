@@ -20,13 +20,14 @@ $stmt = $dbh->prepare("
         st.reg_no,
         st.course AS course_id,
         co.course_name,
-        st.academic_year,
-        st.year_of_study,
-        st.semester
+        en.academic_year,
+        en.year_of_study,
+        en.semester
     FROM results r
     LEFT JOIN course_unit cu ON r.code = cu.id
     LEFT JOIN students st ON r.studentId = st.studentId
     LEFT JOIN course co ON st.course = co.id
+    LEFT JOIN enrollments en ON st.studentId = en.studentId
     WHERE r.studentId = :user_id
     ORDER BY cu.name ASC
 ");
