@@ -11,7 +11,7 @@ $user_id = $_SESSION['user_id'];
 
 // Fetch data
 $stmt = $dbh->prepare("
-    SELECT
+    SELECT DISTINCT
         r.*,
         cu.name AS course_unit_name,
         cu.credit_units,
@@ -28,6 +28,8 @@ $stmt = $dbh->prepare("
     LEFT JOIN students st ON r.studentId = st.studentId
     LEFT JOIN course co ON st.course = co.id
     LEFT JOIN enrollments en ON st.studentId = en.studentId
+        AND en.academic_year = (SELECT MAX(academic_year) FROM enrollments WHERE studentId = :user_id)
+        AND en.semester = (SELECT MAX(semester) FROM enrollments WHERE studentId = :user_id)
     WHERE r.studentId = :user_id
     ORDER BY cu.name ASC
 ");
