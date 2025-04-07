@@ -49,7 +49,7 @@ if (isset($_POST['setup_btn'])) {
                     if ($stmt->execute()) {
                         $_SESSION['studentId'] = $userId;
                         $_SESSION['success'] = "Student registered successfully!";
-                        header('Location: index.php');
+                        header('Location: student-dashboard.php');
                         exit;
                     }
                 }
