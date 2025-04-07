@@ -95,31 +95,88 @@ if (isset($_POST['enroll'])) {
     $year_of_study = $_POST['year_of_study'];
 
     try {
-        // enroll if the student has not enrolled for the acadmeic year, semester and year of study
+        // First check if already enrolled for this semester/year
         $stmt = $dbh->prepare("SELECT * FROM enrollments WHERE studentId = ? AND academic_year = ? AND semester = ? AND year_of_study = ?");
         $stmt->execute([$user_id, $academic_year, $semester, $year_of_study]);
-        $enrollment = $stmt->fetch(PDO::FETCH_OBJ);
-        if ($enrollment) {
+        
+        if ($stmt->rowCount() > 0) {
             $error_msg = "Already enrolled for this academic year, semester and year of study.";
             header("Location: profile.php?status=error&message=$error_msg");
             exit();
         }
 
-        // Insert enrollment record
+        // Get the most recent enrollment
+        $stmt = $dbh->prepare("SELECT * FROM enrollments WHERE studentId = ? ORDER BY year_of_study DESC, semester DESC LIMIT 1");
+        $stmt->execute([$user_id]);
+        $last_enrollment = $stmt->fetch(PDO::FETCH_OBJ);
+
+        if ($last_enrollment) {
+            // Check if results exist for the last enrollment
+            $stmt = $dbh->prepare("SELECT * FROM results WHERE studentId = ? AND year_of_study = ? AND semester = ?");
+            $stmt->execute([$user_id, $last_enrollment->year_of_study, $last_enrollment->semester]);
+            $has_results = $stmt->rowCount() > 0;
+
+            if (!$has_results) {
+                $error_msg = "You must have results for Year {$last_enrollment->year_of_study}, Semester {$last_enrollment->semester} before enrolling.";
+                header("Location: profile.php?status=error&message=$error_msg");
+                exit();
+            }
+
+            // Check if new enrollment follows correct progression
+            $valid = false;
+
+            if ($last_enrollment->year_of_study == 1 && $last_enrollment->semester == 1 && 
+                $year_of_study == 1 && $semester == 2) {
+                $valid = true;
+            }
+            elseif ($last_enrollment->year_of_study == 1 && $last_enrollment->semester == 2 && 
+                    $year_of_study == 2 && $semester == 1) {
+                $valid = true;
+            }
+            elseif ($last_enrollment->year_of_study == 2 && $last_enrollment->semester == 1 && 
+                    $year_of_study == 2 && $semester == 2) {
+                $valid = true;
+            }
+            elseif ($last_enrollment->year_of_study == 2 && $last_enrollment->semester == 2 && 
+                    $year_of_study == 3 && $semester == 1) {
+                $valid = true;
+            }
+            elseif ($last_enrollment->year_of_study == 3 && $last_enrollment->semester == 1 && 
+                    $year_of_study == 3 && $semester == 2) {
+                $valid = true;
+            }
+
+            if (!$valid) {
+                $error_msg = "Invalid enrollment progression. Please follow the correct sequence.";
+                header("Location: profile.php?status=error&message=$error_msg");
+                exit();
+            }
+
+        } else {
+            // First enrollment: must be Year 1 Semester 1
+            if ($year_of_study != 1 || $semester != 1) {
+                $error_msg = "First enrollment must be Year 1 Semester 1.";
+                header("Location: profile.php?status=error&message=$error_msg");
+                exit();
+            }
+        }
+
+        // All checks passed – Insert new enrollment
         $stmt = $dbh->prepare("INSERT INTO enrollments (studentId, academic_year, semester, year_of_study) VALUES (?, ?, ?, ?)");
         $stmt->execute([$user_id, $academic_year, $semester, $year_of_study]);
+
         $success_msg = "Successfully enrolled!";
         header("Location: profile.php?status=success&message=$success_msg");
         exit();
-        
+
     } catch (PDOException $e) {
         error_log("Database error (enrollment): " . $e->getMessage());
-        // $error_msg = "Error enrolling in course";
-        $error_msg = $e->getMessage();
+        $error_msg = "Error enrolling in course: " . $e->getMessage();
         header("Location: profile.php?status=error&message=$error_msg");
         exit();
     }
 }
+
 
 // Handle Profile Update
 if (isset($_POST['update_profile'])) {
@@ -474,20 +531,20 @@ if(isset($_POST['change_password'])){
             
             <div class="mb-3">
                 <label for="currentPassword" class="form-label">Current Password</label>
-                <input type="password" class="form-control" id="currentPassword" name="current_password" required>
+                <input type="password" class="form-control" id="currentPassword" name="current_password" placeholder="••••••••••••••••" required>
                 <div class="invalid-feedback">Please enter your current password</div>
             </div>
             
             <div class="mb-3">
                 <label for="newPassword" class="form-label">New Password</label>
-                <input type="password" class="form-control" id="newPassword" name="new_password" required>
+                <input type="password" class="form-control" id="newPassword" name="new_password" placeholder="••••••••••••••••" required>
                 <div class="invalid-feedback">Please enter a new password</div>
                 <small class="form-text text-muted">Minimum 8 characters, at least 1 uppercase, 1 lowercase, and 1 number</small>
             </div>
             
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="••••••••••••••••" required>
                 <div class="invalid-feedback">Passwords must match</div>
             </div>
             

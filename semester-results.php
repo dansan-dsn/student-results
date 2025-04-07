@@ -9,33 +9,52 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] !== 'student')) {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch data
-$stmt = $dbh->prepare("
-    SELECT DISTINCT
-        r.*,
-        cu.name AS course_unit_name,
-        cu.credit_units,
-        cu.code AS unit_code,
-        st.name AS student_name,
-        st.reg_no,
-        st.course AS course_id,
-        co.course_name,
-        en.academic_year,
-        en.year_of_study,
-        en.semester
-    FROM results r
-    LEFT JOIN course_unit cu ON r.code = cu.id
-    LEFT JOIN students st ON r.studentId = st.studentId
-    LEFT JOIN course co ON st.course = co.id
-    LEFT JOIN enrollments en ON st.studentId = en.studentId
-        AND en.academic_year = (SELECT MAX(academic_year) FROM enrollments WHERE studentId = :user_id)
-        AND en.semester = (SELECT MAX(semester) FROM enrollments WHERE studentId = :user_id)
-    WHERE r.studentId = :user_id
-    ORDER BY cu.name ASC
+$latestEnrollmentStmt = $dbh->prepare("
+    SELECT academic_year, year_of_study, semester 
+    FROM enrollments 
+    WHERE studentId = :user_id 
+    ORDER BY academic_year DESC, semester DESC 
+    LIMIT 1
 ");
-$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-$stmt->execute();
-$results = $stmt->fetchAll(PDO::FETCH_OBJ);
+$latestEnrollmentStmt->execute([':user_id' => $user_id]);
+$latest = $latestEnrollmentStmt->fetch(PDO::FETCH_OBJ);
+
+if($latest) {
+    $stmt = $dbh->prepare("
+        SELECT
+            r.*,
+            cu.name AS course_unit_name,
+            cu.credit_units,
+            cu.code AS unit_code,
+            st.name AS student_name,
+            st.reg_no,
+            st.course AS course_id,
+            co.course_name,
+            :academic_year AS academic_year,
+            :year_of_study AS year_of_study,
+            :semester AS semester
+        FROM results r
+        LEFT JOIN course_unit cu ON r.code = cu.id
+        LEFT JOIN students st ON r.studentId = st.studentId
+        LEFT JOIN course co ON st.course = co.id
+        WHERE r.studentId = :user_id
+            AND r.academic_year = :academic_year
+            AND r.semester = :semester
+        ORDER BY cu.name ASC
+    ");
+
+    $stmt->execute([
+        ':user_id' => $user_id,
+        ':academic_year' => $latest->academic_year,
+        ':year_of_study' => $latest->year_of_study,
+        ':semester' => $latest->semester
+    ]);
+
+    $results = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+} else {
+    $results = [];
+}
 
 // Calculate grades and totals
 $total_credit_hours = 0;

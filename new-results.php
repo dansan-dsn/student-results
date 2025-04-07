@@ -9,16 +9,42 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] !== 'staff')) {
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if(isset($_POST['save_mrks'])){
-        $stmt = $dbh->prepare("INSERT INTO results (code, studentId, course_work, exam) VALUES (:code, :studentId, :course_work, :exam) ");
+        $studentId = $_POST['studentId'];
+        $courseUnitId = $_POST['code'];
+        // Fetch year and semester from enrollments
+        $stmt = $dbh->prepare("SELECT year_of_study, semester, academic_year FROM enrollments WHERE studentId = ? ORDER BY year_of_study DESC, semester DESC LIMIT 1");
+        $stmt->execute([$_POST['studentId']]);
+        $latest_enroll = $stmt->fetch(PDO::FETCH_OBJ);
+    
+        if (!$latest_enroll) {
+            header("Location: new-results.php?status=error&message=No enrollment record found for this student.");
+            exit();
+        }
+
+         // Check if the student already has a result for the selected course unit
+         $check = $dbh->prepare("SELECT id FROM results WHERE studentId = ? AND code = ?");
+         $check->execute([$studentId, $courseUnitId]);
+         if ($check->rowCount() > 0) {
+             header("Location: new-results.php?status=error&message=Student already has a result for this course unit.");
+             exit();
+         }
+    
+        $stmt = $dbh->prepare("INSERT INTO results (code, studentId, course_work, exam, year_of_study, semester, academic_year) 
+                               VALUES (:code, :studentId, :course_work, :exam, :year_of_study, :semester, :academic_year)");
         $stmt->execute([
-            ':code' => $_POST['code'],
-            ':studentId' => $_POST['studentId'],
+            ':code' => $courseUnitId,
+            ':studentId' => $studentId,
             ':course_work' => $_POST['course_work'],
             ':exam' => $_POST['exam'],
+            ':year_of_study' => $latest_enroll->year_of_study,
+            ':semester' => $latest_enroll->semester,
+            ':academic_year' => $latest_enroll->academic_year
         ]);
-        header("Location: new-results.php?status=success&message=Added successful");
+        
+        header("Location: new-results.php?status=success&message=Added successfully");
         exit();
     }
+    
 }
 
 // Fetch courses units taught by this lecturer (example)

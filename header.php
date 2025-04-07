@@ -193,6 +193,7 @@ try {
     <aside>
         <h5 class="logo-title">Results System</h5>
     
+        <?php if($user_role == 'staff'):?>
         <!-- Dashboard Section -->
         <div class="menu-section">
             <ul>
@@ -203,6 +204,18 @@ try {
                 </li>
             </ul>
         </div>
+        <?php elseif($user_role == 'student'):?>
+        <!-- Dashboard Section -->
+        <div class="menu-section">
+            <ul>
+                <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'student-dashboard.php' && empty($_GET['page'])) ? 'active' : ''; ?>">
+                    <a href="student-dashboard">
+                        <i class='bx bxs-dashboard'></i> Dashboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <?php endif; ?>
 
         <!-- Results Section -->
         <div class="menu-section">

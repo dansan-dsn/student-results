@@ -30,6 +30,8 @@ if(isset($_POST['login_btn'])){
                     header('Location: setup.php');
                     exit();
                 }
+                header("Location: student-dashboard.php");
+                exit();
             }else if ($user->role == 'staff') {
                 $stmt = $dbh->prepare("SELECT * FROM staff WHERE staffId = :staffId AND rank IS NOT NULL");
                 $stmt->bindParam(':staffId', $user->id);
@@ -40,9 +42,9 @@ if(isset($_POST['login_btn'])){
                     header('Location: setup.php');
                     exit();
                 }
+                header("Location: index.php");
+                exit();
             }
-            header("Location: index.php");
-            exit();
            
         } else {
             $error = "Invalid password!";

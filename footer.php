@@ -107,7 +107,7 @@
                     title: status === 'success' ? 'Success!' : 'Error!',
                     text: message,
                     showConfirmButton: false,
-                    timer: 3000, //3000
+                    timer: 5000, //3000
                     toast: true, // Enable toast mode
                     customClass: {
                         popup: 'small-toast' // Custom class for the toast
