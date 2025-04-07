@@ -88,10 +88,10 @@ try {
                     <i class='bx bx-building-house'></i> Examination Room Allocations
                 </h2>
                 <div class="header-actions">
-                    <div class="search-box">
+                    <!-- <div class="search-box">
                         <i class='bx bx-search'></i>
                         <input type="text" placeholder="Search allocations...">
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

@@ -197,7 +197,7 @@ try {
         <div class="menu-section">
             <ul>
                 <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php' && empty($_GET['page'])) ? 'active' : ''; ?>">
-                    <a href="index.php">
+                    <a href="index">
                         <i class='bx bxs-dashboard'></i> Dashboard
                     </a>
                 </li>
@@ -215,14 +215,14 @@ try {
                     <ul id="results-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['new-results.php', 'semester-results.php'])) ? 'block' : 'none'; ?>;">
                         <?php if($user_role === 'staff'):?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'new-results.php') ? 'active' : ''; ?>">
-                            <a href="new-results.php">New Results</a>
+                            <a href="new-results">New Results</a>
                         </li>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'student-results.php') ? 'active' : ''; ?>">
-                            <a href="student-results.php">Student Results</a>
+                            <a href="student-results">Student Results</a>
                         </li>
                         <?php elseif($user_role === 'student'):?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'semester-results.php') ? 'active' : ''; ?>">
-                            <a href="semester-results.php">Semester Results</a>
+                            <a href="semester-results">Semester Results</a>
                         </li>
                         <?php endif;?>
                     </ul>
@@ -241,10 +241,10 @@ try {
                     </a>
                     <ul id="course-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['course.php', 'course_units.php'])) ? 'block' : 'none'; ?>;">
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'course.php') ? 'active' : ''; ?>">
-                            <a href="course.php">Main Courses</a>
+                            <a href="course">Main Courses</a>
                         </li>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'course_units.php') ? 'active' : ''; ?>">
-                            <a href="course_units.php">Course Units</a>
+                            <a href="course_units">Course Units</a>
                         </li>
                     </ul>
                 </li>
@@ -262,7 +262,7 @@ try {
                     </a>
                     <ul id="reports-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['generate-reports.php', 'export-results.php'])) ? 'block' : 'none'; ?>;">
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'generate-reports.php') ? 'active' : ''; ?>">
-                            <a href="generate-reports.php">Generate Reports</a>
+                            <a href="generate-reports">Generate Reports</a>
                         </li>
                         <!-- <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'export-results.php') ? 'active' : ''; ?>">
                             <a href="export-results.php">Export to Excel</a>
@@ -283,11 +283,11 @@ try {
                     <ul id="complaints-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['submit-complaint.php', 'complaint-status.php'])) ? 'block' : 'none'; ?>;">
                         <?php if($user_role === 'student'):?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'submit-complaint.php') ? 'active' : ''; ?>">
-                            <a href="submit-complaint.php">Submit Complaint</a>
+                            <a href="submit-complaint">Submit Complaint</a>
                         </li>
                         <?php else: ?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'complaint-status.php') ? 'active' : ''; ?>">
-                            <a href="complaint-status.php">Check Status</a>
+                            <a href="complaint-status">Check Status</a>
                         </li>
                         <?php endif;?>
                     </ul>
@@ -306,14 +306,14 @@ try {
                     <ul id="room-management-submenu" class="submenu" style="display: <?php echo (in_array(basename($_SERVER['PHP_SELF']), ['assign-seats.php', 'view-allocations.php', 'departments.php'])) ? 'block' : 'none'; ?>;">
                         <?php if ($user_role === 'staff'):?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'departments.php') ? 'active' : ''; ?>">
-                            <a href="departments.php">Departments</a>
+                            <a href="departments">Departments</a>
                         </li>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'assign-seats.php') ? 'active' : ''; ?>">
-                            <a href="assign-seats.php">Assign Rooms</a>
+                            <a href="assign-seats">Assign Rooms</a>
                         </li>
                         <?php endif; ?>
                         <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'view-allocations.php') ? 'active' : ''; ?>">
-                            <a href="view-allocations.php">View Allocations</a>
+                            <a href="view-allocations">View Allocations</a>
                         </li>
                     </ul>
                 </li>
@@ -324,7 +324,7 @@ try {
         <div class="menu-section">
             <ul>
                 <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'profile.php') ? 'active' : ''; ?>">
-                    <a href="profile.php">
+                    <a href="profile">
                         <i class="bx bx-user"></i> Profile
                     </a>
                 </li>

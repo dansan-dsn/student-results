@@ -83,7 +83,7 @@ if(isset($_POST['reset_btn'])){
             <div class="input-group">
                 <label for="email">Your Email</label>
                 <div class="input-field">
-                    <i class='bx bxs-envelope'></i>
+                    <i class='bx bxs-envelope main-icon'></i>
                     <input type="email" id="email" name="email" placeholder="example@university.edu" required>
                 </div>
             </div>
@@ -91,9 +91,9 @@ if(isset($_POST['reset_btn'])){
             <div class="input-group">
                 <label for="password">New Password</label>
                 <div class="input-field">
-                    <i class='bx bxs-lock-alt'></i>
+                    <i class='bx bxs-lock-alt main-icon'></i>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
-                    <i class='bx bxs-hide password-toggle'></i>
+                    <i class='bx bx-hide show-icon' id="togglePassword"></i>
                 </div>
             </div>
 
@@ -106,20 +106,22 @@ if(isset($_POST['reset_btn'])){
     </div>
 </div>
 
-<script src="assets/js/header.js">
-    // Password toggle functionality
-    document.querySelector('.password-toggle').addEventListener('click', function() {
-        const passwordInput = document.getElementById('password');
-        const icon = this;
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.replace('bxs-hide', 'bxs-show');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.replace('bxs-show', 'bxs-hide');
-        }
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        
+        togglePassword.addEventListener('click', function() {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Toggle the icon
+            this.classList.toggle('bx-hide');
+            this.classList.toggle('bx-show');
+        });
     });
 </script>
+<script src="assets/js/header.js"></script>
 </body>
 </html>

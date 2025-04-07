@@ -23,9 +23,25 @@ try {
     $complaints = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 } catch (PDOException $e) {
-    $_SESSION['error'] = "Error fetching complaints: " . $e->getMessage();
-    header("Location: complaint-status.php");
+    $error_msg = "Error fetching complaints: " . $e->getMessage();
+    header("Location: complaint-status.php?status=error&message=" . urlencode($error_msg));
     exit();
+}
+
+if(isset($_POST['sort_btn'])){
+    $complaint_id = $_POST['complaint_id'];
+    try {
+        // Update complaint status to resolved
+        $stmt = $dbh->prepare("UPDATE complaints SET status = 1 WHERE id = :complaint_id");
+        $stmt->execute([':complaint_id' => $complaint_id]);
+        header("Location: complaint-status.php?status=success&message=Complaint marked as resolved");
+        exit();
+
+    } catch (PDOException $e) {
+        $error_msg =  $e->getMessage();
+        header("Location: complaint-status.php?status=error&message=" . urlencode($error_msg));
+        exit();
+    }
 }
 
 ?>
@@ -54,7 +70,11 @@ try {
                                     data-bs-target="#collapse<?= $complaint->id ?>" aria-expanded="false" 
                                     aria-controls="collapse<?= $complaint->id ?>">
                                 <span class="complaint-title"><?= $complaint->reason ?></span>
-                                <span class="badge bg-secondary ms-2"><?= $complaint->status ?></span>
+                                <?php if($complaint->status == 0):?>
+                                    <span class="badge bg-secondary ms-2">Pending</span>
+                                <?php elseif($complaint->status == 1):?>
+                                    <span class="badge bg-success ms-2">Resolved</span>
+                                <?php endif; ?>
                                 <span class="text-muted ms-auto"><?= date('M j', strtotime($complaint->created_at)) ?></span>
                             </button>
                         </h2>
@@ -65,10 +85,14 @@ try {
                                 <div class="complaint-content">
                                     <?= nl2br($complaint->details) ?>
                                 </div>
-                                <!-- <div class="mt-3">
-                                    <textarea class="form-control response-field" placeholder="Type your response..."></textarea>
-                                    <button class="btn btn-primary mt-2 btn-sm">Send Response</button>
-                                </div> -->
+                                <?php if($complaint->status == 0):?>
+                                <form action="" method="POST">
+                                    <input type="hidden" name="complaint_id" value="<?= $complaint->id ?>">
+                                    <div class="mt-3">
+                                        <button type="submit" class="btn btn-primary mt-2 btn-sm" name="sort_btn">Click if Sorted!</button>
+                                    </div>
+                                </form>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

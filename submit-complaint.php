@@ -40,12 +40,13 @@ try{
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     try{
         if(isset($_POST['complaint_btn'])){
-            $stmt = $dbh->prepare("INSERT INTO complaints (reg_no, reason, details, lecturer) VALUES (:reg_no, :reason, :details, :lecturer)");
+            $stmt = $dbh->prepare("INSERT INTO complaints (reg_no, reason, details, lecturer, status) VALUES (:reg_no, :reason, :details, :lecturer, :status)");
             $stmt->execute([
                 ':reg_no' => $_POST['id'],
                 ':reason' => $_POST['reason'],
                 ':details' => $_POST['details'],
                 ':lecturer' => $_POST['lecturer'],
+                ':status' =>  0
             ]);
             header("Location: submit-complaint.php?status=success&message=Sent successfully");
             exit();

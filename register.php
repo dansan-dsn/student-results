@@ -88,7 +88,7 @@ if (isset($_POST['register_btn'])) {
                 <div class="input-group">
                     <label for="email">Email</label>
                     <div class="input-field">
-                        <i class='bx bxs-envelope'></i>
+                        <i class='bx bxs-envelope main-icon'></i>
                         <input type="email" id="email" name="email" placeholder="example@university.edu" required>
                     </div>
                 </div>
@@ -96,24 +96,25 @@ if (isset($_POST['register_btn'])) {
                 <div class="input-group">
                     <label for="password">Password</label>
                     <div class="input-field">
-                        <i class='bx bxs-lock-alt'></i>
+                        <i class='bx bxs-lock main-icon'></i>
                         <input type="password" id="password" name="password" placeholder="••••••••" required>
-                        <i class='bx bxs-hide password-toggle'></i>
+                        <i class='bx bx-hide show-icon' ></i>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <label for="confirm_password">Confirm Password</label>
                     <div class="input-field">
-                        <i class='bx bxs-lock-alt'></i>
+                        <i class='bx bxs-lock main-icon'></i>
                         <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+                        <i class='bx bx-hide show-icon' style="display: none;"></i>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <label for="role">Account Type</label>
                     <div class="input-field">
-                        <i class='bx bxs-group'></i>
+                        <i class='bx bxs-group main-icon'></i>
                         <select id="role" name="role" required>
                             <option value="" disabled selected>Select your role</option>
                             <option value="student">Student</option>
@@ -125,27 +126,40 @@ if (isset($_POST['register_btn'])) {
                 <button type="submit" name="register_btn" class="auth-btn">Register</button>
 
                 <div class="auth-footer">
-                    <p>Already have an account? <a href="login.php">Sign in</a></p>
+                    <p>Already have an account? <a href="login">Sign in</a></p>
                 </div>
             </form>
         </div>
     </div>
 
-    <script src="assets/js/header.js">
-        // Password toggle functionality
-        document.querySelector('.password-toggle').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const icon = this;
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the first eye icon and both password fields
+    const togglePassword = document.querySelector('.show-icon');
+    const password = document.getElementById('password');
+    const confirm_password = document.getElementById('confirm_password');
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.replace('bxs-hide', 'bxs-show');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.replace('bxs-show', 'bxs-hide');
-            }
+    // Only set up the toggle if all elements exist
+    if (togglePassword && password && confirm_password) {
+        togglePassword.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Determine the new type based on the main password field
+            const newType = password.type === 'password' ? 'text' : 'password';
+            
+            // Toggle both fields' types
+            password.type = newType;
+            confirm_password.type = newType;
+            
+            // Toggle all eye icons (both will stay in sync)
+            document.querySelectorAll('.show-icon').forEach(icon => {
+                icon.classList.toggle('bx-hide');
+                icon.classList.toggle('bx-show');
+            });
         });
-
-    </script>
-    </body>
-    </html>
+    }
+});
+</script>
+<script src="assets/js/header.js"></script>
+</body>
+</html>

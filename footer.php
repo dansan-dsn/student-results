@@ -55,18 +55,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             const currentPage = basename(window.location.pathname);
             const parentMenus = {
-                'new-results.php': 'results',
-                'semester-results.php': 'results',
-                'student-results.php': 'results',
-                'course.php': 'course',
-                'course_units.php': 'course',
-                'generate-reports.php': 'reports',
-                'export-results.php': 'reports',
-                'submit-complaint.php': 'complaints',
-                'complaint-status.php': 'complaints',
-                'assign-seats.php': 'room-management',
-                'view-allocations.php': 'room-management',
-                'departments.php': 'room-management'
+                'new-results': 'results',
+                'semester-results': 'results',
+                'student-results': 'results',
+                'course': 'course',
+                'course_units': 'course',
+                'generate-reports': 'reports',
+                'export-results': 'reports',
+                'submit-complaint': 'complaints',
+                'complaint-status': 'complaints',
+                'assign-seats': 'room-management',
+                'view-allocations': 'room-management',
+                'departments': 'room-management'
             };
 
             if (parentMenus[currentPage]) {

@@ -92,7 +92,7 @@ if(isset($_POST['login_btn'])){
             <div class="input-group">
                 <label for="email">Email</label>
                 <div class="input-field">
-                    <i class='bx bxs-envelope'></i>
+                    <i class='bx bxs-envelope main-icon'></i>
                     <input type="email" id="email" name="email" placeholder="example@university.edu" required>
                 </div>
             </div>
@@ -100,14 +100,14 @@ if(isset($_POST['login_btn'])){
             <div class="input-group">
                 <label for="password">Password</label>
                 <div class="input-field">
-                    <i class='bx bxs-lock-alt'></i>
+                    <i class='bx bxs-lock main-icon'></i>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
-                    <i class='bx bxs-hide password-toggle'></i>
+                    <i class='bx bx-hide show-icon' id="togglePassword"></i>
                 </div>
             </div>
 
             <div>
-                <p><a href="reset_pwd.php" style="text-decoration: none; color: #4b8f1f"
+                <p><a href="reset_pwd" style="text-decoration: none; color: #4b8f1f"
                     onmouseover="this.style.color='#79c746'"
                     onmouseout="this.style.color='#4b8f1f'"
                 >Forgot Password?</a></p>
@@ -116,26 +116,28 @@ if(isset($_POST['login_btn'])){
             <button type="submit" name="login_btn" class="auth-btn">Login</button>
 
             <div class="auth-footer">
-                <p> Without an account? <a href="register.php">Register</a></p>
+                <p> Without an account? <a href="register">Register</a></p>
             </div>
         </form>
     </div>
 </div>
 
-<script src="assets/js/header.js">
-    // Password toggle functionality
-    document.querySelector('.password-toggle').addEventListener('click', function() {
-        const passwordInput = document.getElementById('password');
-        const icon = this;
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.replace('bxs-hide', 'bxs-show');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.replace('bxs-show', 'bxs-hide');
-        }
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        
+        togglePassword.addEventListener('click', function() {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Toggle the icon
+            this.classList.toggle('bx-hide');
+            this.classList.toggle('bx-show');
+        });
     });
 </script>
+<script src="assets/js/header.js"></script>
 </body>
 </html>
