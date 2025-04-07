@@ -130,7 +130,7 @@ $current_gpa = 3.5;
         <!-- Recent Results -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>Recent Results</h4>
+                <h4 class="fw-bold text-secondary">Recent Results</h4>
                 <a href="semester-results.php" class="btn btn-sm btn-outline-secondary">View All</a>
             </div>
             <div class="card-body">
@@ -173,7 +173,7 @@ $current_gpa = 3.5;
         <div class="row">
             <div class="col-md-12">
                 <div class="card mb-4">
-                    <div class="card-header"><h4>Quick Actions</h4></div>
+                    <div class="card-header fw-bold text-secondary"><h4>Quick Actions</h4></div>
                     <div class="card-body">
                         <div class="row quick-actions">
                             <div class="col-6 mb-3">
