@@ -151,8 +151,8 @@ $courses = $dbh->query("SELECT id, course_name FROM course")->fetchAll();
         <?php if (!empty($grouped)): ?>
             <?php foreach ($grouped as $year => $semesters): ?>
                 <?php foreach ($semesters as $sem => $students): ?>
-                    <h5 class="mt-4 bg-light p-2 border-start text-dark fw-bold border-primary border-3">
-                        Academic Year: <?= $year ?> | Semester: <?= $sem ?>
+                    <h5 class="mt-4 bg-info p-2 border-start text-dark fw-bold border-white border-3">
+                        Academic Year: <?= $year ?> | Semester: <?= $sem ?> 
                     </h5>
                     <?php foreach ($students as $sid => $student): ?>
                         <div class="card mb-3 shadow-sm">
@@ -160,8 +160,8 @@ $courses = $dbh->query("SELECT id, course_name FROM course")->fetchAll();
                                 <strong><?= $student['name'] ?></strong> (<?= $student['reg_no'] ?>) - <?= $student['course_code'] ?>
                             </div>
                             <div class="card-body p-0">
-                                <table class="table table-bordered mb-0">
-                                    <thead class="table-light">
+                                <table class="table table-bordered table-dark mb-0">
+                                    <thead class="">
                                         <tr>
                                             <th class="fw-bold text-secondary">Unit Code</th>
                                             <th class="fw-bold text-secondary">Unit Name</th>
