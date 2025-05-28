@@ -55,7 +55,7 @@ A complete student registration system built with PHP and Bootstrap for efficien
 ### Installation
 ```bash
 # Clone repository
-git clone https://github.com/dansan-dsn/student-registration-system.git
+git clone https://github.com/dansan-dsn/student-results.git
 cd student-registration-system
 
 # Import database
